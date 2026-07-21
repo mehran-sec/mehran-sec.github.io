@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Detecting SSH Brute-Force with Wazuh Correlation Rules"
 date: 2026-07-21
 ---
