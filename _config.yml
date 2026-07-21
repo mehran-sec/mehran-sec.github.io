@@ -1,1 +1,7 @@
-theme: jekyll-theme-slate
+theme: minima
+title: Muhammad Mehran
+description: >-
+  Notes and write-ups from my hands-on cybersecurity home lab —
+  SIEM/XDR, detection engineering, and vulnerability assessment work.
+author: Muhammad Mehran
+show_excerpts: true
