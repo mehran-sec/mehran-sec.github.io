@@ -1,0 +1,17 @@
+# Current focus areas — NOT a skill/proficiency score. `filled` out of
+# `segments` is a rough visual weighting of how established each area is
+# right now (more hands-on lab time = more filled), set based on what's
+# actually been done in the home lab vs. what's still an early goal (cloud).
+# Edit freely — this is the single place to update as focus shifts.
+- label: Detection
+  segments: 5
+  filled: 4
+- label: Network
+  segments: 5
+  filled: 4
+- label: Linux
+  segments: 5
+  filled: 4
+- label: Cloud
+  segments: 5
+  filled: 2

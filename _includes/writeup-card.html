@@ -1,0 +1,16 @@
+{% comment %}
+  Usage: {% include writeup-card.html post=some_post %}
+{% endcomment %}
+<a class="card card--interactive featured-card" href="{{ post.url | relative_url }}">
+  {% if post.categories.size > 0 %}
+  <p class="eyebrow">{{ post.categories | first }}</p>
+  {% endif %}
+
+  <h3 class="featured-card__title">{{ post.title }}</h3>
+
+  <p class="featured-card__excerpt text-secondary">
+    {{ post.excerpt | default: post.content | strip_html | truncate: 160 }}
+  </p>
+
+  <span class="featured-card__cta">Read writeup &rarr;</span>
+</a>

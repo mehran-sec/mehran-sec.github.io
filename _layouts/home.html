@@ -10,11 +10,16 @@ layout: default
   at once. Uncomment each include as that section is built.
 {% endcomment %}
 
-<div class="container">
-  {{ content }}
-</div>
+{% include hero.html %}
+{% include featured-writeup.html %}
 
-{% comment %} {% include hero.html %} {% endcomment %}
+{% comment %}
+  index.md's current body copy (the "Hi, I'm Mehran..." intro) isn't
+  rendered directly anymore — the hero now covers that ground. It's
+  being repurposed as the source text for the real About section in
+  Step 5 rather than shown twice in two different styles.
+{% endcomment %}
+
 {% comment %} {% include about.html %} {% endcomment %}
 {% comment %} {% include security-focus.html %} {% endcomment %}
 {% comment %} {% include skills.html %} {% endcomment %}

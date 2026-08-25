@@ -1,0 +1,36 @@
+<section class="hero container">
+  <h1>MEHRAN</h1>
+  <p class="hero__role">Cybersecurity Student</p>
+  <hr class="hero__divider">
+
+  <p class="lede">
+    Building practical skills in security operations, network security,
+    threat detection, Linux, and cloud security.
+  </p>
+
+  <div class="btn-row">
+    <a class="btn btn--primary" href="#projects">View Projects</a>
+    <a class="btn" href="#writeups">Read Writeups</a>
+    <a class="btn" href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener">GitHub</a>
+  </div>
+
+  <p class="hero__status">
+    <span class="status-dot" aria-hidden="true"></span>
+    Currently building<strong>{{ site.currently_learning }}</strong>
+  </p>
+
+  <div class="card hero__dashboard">
+    <p class="eyebrow hero__dashboard-title">Security Operations</p>
+
+    {% for item in site.data.focus %}
+    <div class="focus-row">
+      <span class="focus-row__label">{{ item.label }}</span>
+      <div class="focus-bar" role="img" aria-label="{{ item.label }}: current area of focus">
+        {% for i in (1..item.segments) %}
+        <span class="focus-bar__segment{% if i <= item.filled %} focus-bar__segment--filled{% endif %}"></span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>

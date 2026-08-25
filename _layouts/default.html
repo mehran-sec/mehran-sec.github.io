@@ -6,7 +6,7 @@
 
   {%- assign page_title = page.title | default: site.title -%}
   <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.description | strip_html | truncate: 60 }}{% endif %}</title>
-  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
+  <meta name="description" content="{{ page.excrept | default: site.description | strip_html | strip_newlines | strip_truncate: 160 }}">
   <meta name="author" content="{{ site.author }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="icon" type="image/svg+xml" href="{{ '/assets/images/favicon.svg' | relative_url }}">
