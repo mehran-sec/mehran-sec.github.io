@@ -2,6 +2,9 @@
 layout: post
 title: "Detecting SSH Brute-Force with Wazuh Correlation Rules"
 date: 2026-07-21
+categories: [SIEM]
+tags: [wazuh, detection-engineering, ssh]
+excerpt: "Building a custom Wazuh correlation rule to turn noisy SSH auth failures into a real brute-force signal — and validating it against a simulated attack."
 ---
 
 ## The Problem
