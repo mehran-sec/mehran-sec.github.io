@@ -1,0 +1,21 @@
+<section class="section" id="security-focus">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Current Security Focus</p>
+      <h2>Where I'm actively building</h2>
+      <p>These bars mark areas of ongoing focus, not a measured skill level — a rough picture of where lab time is going right now.</p>
+    </div>
+    <div class="card-grid">
+      {% for item in site.data.focus %}
+      <div class="card focus-card">
+        <p class="eyebrow">{{ item.label }}</p>
+        <div class="focus-bar" role="img" aria-label="{{ item.label }}: current area of focus">
+          {% for i in (1..item.segments) %}<span class="focus-bar__segment{% if i <= item.filled %} focus-bar__segment--filled{% endif %}"></span>{% endfor %}
+        </div>
+        {% if item.description %}<p class="focus-card__desc">{{ item.description }}</p>{% endif %}
+        {% if item.evidence_slug %}{% assign evidence_post = site.posts | where: "slug", item.evidence_slug | first %}{% if evidence_post %}<p class="focus-card__evidence"><a href="{{ evidence_post.url | relative_url }}">See it applied &rarr;</a></p>{% endif %}{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
