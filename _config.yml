@@ -1,7 +1,38 @@
 theme: minima
-title: Muhammad Mehran
+
+title: "Mehran"
+name: "Muhammad Mehran"
 description: >-
-  Notes and write-ups from my hands-on cybersecurity home lab —
-  SIEM/XDR, detection engineering, and vulnerability assessment work.
-author: Muhammad Mehran
-show_excerpts: true
+  Cybersecurity student building hands-on skills toward SOC analyst and
+  cloud security work — labs, detections, and writeups from the process.
+author: "Muhammad Mehran"
+github_username: mehran-sec
+
+# Site-wide status shown in the hero. Update this as focus shifts.
+currently_learning: "SOC Operations"
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: page
+
+sass:
+  sass_dir: assets/css
+  style: compressed
+
+show_excerpts: false
+
+exclude:
+  - README.md
