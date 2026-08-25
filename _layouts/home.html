@@ -2,29 +2,17 @@
 layout: default
 ---
 {% comment %}
-  Homepage section order (see project brief, Step 4):
-    hero -> about -> security-focus -> skills -> projects
-    -> labs -> writeups -> learning -> career-direction
-
-  Sections are added one include at a time in Steps 4-8 rather than all
-  at once. Uncomment each include as that section is built.
+  Homepage section order:
+    hero -> featured writeup -> about -> security-focus -> skills
 {% endcomment %}
 
 {% include hero.html %}
 {% include featured-writeup.html %}
+{% include about.html %}
+{% include security-focus.html %}
+{% include skills.html %}
 
 {% comment %}
-  index.md's current body copy (the "Hi, I'm Mehran..." intro) isn't
-  rendered directly anymore — the hero now covers that ground. It's
-  being repurposed as the source text for the real About section in
-  Step 5 rather than shown twice in two different styles.
+  Future sections can be added here as they are built:
+  projects -> labs -> writeups -> learning -> career-direction
 {% endcomment %}
-
-{% comment %} {% include about.html %} {% endcomment %}
-{% comment %} {% include security-focus.html %} {% endcomment %}
-{% comment %} {% include skills.html %} {% endcomment %}
-{% comment %} {% include projects.html %} {% endcomment %}
-{% comment %} {% include labs.html %} {% endcomment %}
-{% comment %} {% include writeups.html %} {% endcomment %}
-{% comment %} {% include learning.html %} {% endcomment %}
-{% comment %} {% include career-direction.html %} {% endcomment %}
