@@ -3,15 +3,24 @@
 # right now (more hands-on lab time = more filled), set based on what's
 # actually been done in the home lab vs. what's still an early goal (cloud).
 # Edit freely — this is the single place to update as focus shifts.
+#
+# `evidence_slug` (optional) links a focus area to a real writeup's
+# filename slug, shown as a "see it applied" link in the full Security
+# Focus section.
 - label: Detection
+  description: Correlation rules, alert triage, SIEM tuning
   segments: 5
   filled: 4
+  evidence_slug: 2026-07-21-ssh-bruteforce-detection
 - label: Network
+  description: Traffic analysis, protocol behavior
   segments: 5
   filled: 4
 - label: Linux
+  description: System internals, command-line operations
   segments: 5
   filled: 4
 - label: Cloud
+  description: Building toward AWS/Azure security
   segments: 5
   filled: 2
