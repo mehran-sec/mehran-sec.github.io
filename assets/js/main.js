@@ -18,9 +18,6 @@
 
   toggle.addEventListener("click", toggleMenu);
 
-  // Close the mobile menu after a nav link is used, and let the browser
-  // handle the actual in-page scroll (native `scroll-behavior: smooth`,
-  // which already respects prefers-reduced-motion via the CSS override).
   navList.addEventListener("click", function (event) {
     if (event.target.tagName === "A") {
       closeMenu();
