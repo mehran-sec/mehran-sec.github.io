@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<article class="container section">
+  <a href="{{ '/#writeups' | relative_url }}" class="eyebrow">&larr; Writeups</a>
+
+  <header class="post-header">
+    {% if page.categories.size > 0 %}
+    <p class="eyebrow">{{ page.categories | first }}</p>
+    {% endif %}
+
+    <h1>{{ page.title }}</h1>
+
+    <div class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">
+        {{ page.date | date: "%B %-d, %Y" }}
+      </time>
+
+      {% if page.tags.size > 0 %}
+      <span aria-hidden="true">&middot;</span>
+      <span>
+        {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+      </span>
+      {% endif %}
+    </div>
+  </header>
+
+  {% comment %}
+    Kramdown (GitHub Pages' default markdown processor) auto-generates an
+    id on every heading, so within-page anchor links work without an extra
+    plugin once a writeup is long enough to want them.
+  {% endcomment %}
+  <div class="post-content">
+    {{ content }}
+  </div>
+</article>
