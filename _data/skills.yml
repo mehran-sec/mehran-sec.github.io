@@ -1,0 +1,39 @@
+# Skills grouped by capability, not just a technology checklist. Edit this
+# file to add/remove skills — no HTML changes needed.
+#
+# evidence_slug (optional, on a category) links that category to a real
+# writeup's filename slug, so the claim isn't just a listed word — it
+# points at something actually built.
+categories:
+  - name: Security Operations
+    evidence_slug: 2026-07-21-ssh-bruteforce-detection
+    skills:
+      - Alert Triage
+      - Security Monitoring
+      - Incident Response
+      - Phishing Analysis
+      - Threat Detection
+
+  - name: Networking
+    skills:
+      - TCP/IP
+      - DNS
+      - HTTP/HTTPS
+      - Network Traffic Analysis
+      - Wireshark
+      - Nmap
+
+  - name: Systems
+    skills:
+      - Linux
+      - Windows
+      - Sysmon
+      - auditd
+
+  - name: Security Tooling
+    skills:
+      - Wazuh
+      - Splunk
+      - Wireshark
+      - CyberChef
+      - VirusTotal
