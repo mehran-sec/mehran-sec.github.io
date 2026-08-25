@@ -1,0 +1,25 @@
+---
+layout: default
+---
+{% comment %}
+  Homepage section order (see project brief, Step 4):
+    hero -> about -> security-focus -> skills -> projects
+    -> labs -> writeups -> learning -> career-direction
+
+  Sections are added one include at a time in Steps 4-8 rather than all
+  at once. Uncomment each include as that section is built.
+{% endcomment %}
+
+<div class="container">
+  {{ content }}
+</div>
+
+{% comment %} {% include hero.html %} {% endcomment %}
+{% comment %} {% include about.html %} {% endcomment %}
+{% comment %} {% include security-focus.html %} {% endcomment %}
+{% comment %} {% include skills.html %} {% endcomment %}
+{% comment %} {% include projects.html %} {% endcomment %}
+{% comment %} {% include labs.html %} {% endcomment %}
+{% comment %} {% include writeups.html %} {% endcomment %}
+{% comment %} {% include learning.html %} {% endcomment %}
+{% comment %} {% include career-direction.html %} {% endcomment %}
