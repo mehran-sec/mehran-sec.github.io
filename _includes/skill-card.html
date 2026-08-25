@@ -1,0 +1,11 @@
+{% comment %}
+  Usage: {% include skill-card.html category=some_category %}
+  `category` comes from _data/skills.yml — { name, skills[], evidence_slug? }
+{% endcomment %}
+<div class="card skill-card">
+  <p class="eyebrow">{{ category.name }}</p>
+  <ul class="skill-list">
+    {% for skill in category.skills %}<li>{{ skill }}</li>{% endfor %}
+  </ul>
+  {% if category.evidence_slug %}{% assign evidence_post = site.posts | where: "slug", category.evidence_slug | first %}{% if evidence_post %}<p class="skill-card__evidence"><a href="{{ evidence_post.url | relative_url }}">Demonstrated in: {{ evidence_post.title }} &rarr;</a></p>{% endif %}{% endif %}
+</div>
