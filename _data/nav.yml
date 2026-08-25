@@ -1,0 +1,11 @@
+# Centralized site navigation. Edit here, not in the templates.
+- label: About
+  anchor: "#about"
+- label: Skills
+  anchor: "#skills"
+- label: Projects
+  anchor: "#projects"
+- label: Writeups
+  anchor: "#writeups"
+- label: Contact
+  anchor: "#contact"
