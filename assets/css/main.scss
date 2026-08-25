@@ -2,32 +2,8 @@
 # Front matter required so Jekyll runs this through Sass. Don't remove.
 ---
 
-/* ==========================================================================
-   MEHRAN — SECURITY PORTFOLIO
-   Design system. Organized in sections rather than split into partials so
-   the whole system stays readable in one file. If this grows past ~800
-   lines, split into assets/css/_base.scss, _components.scss, etc. and
-   @import them here.
+/* MEHRAN — SECURITY PORTFOLIO */
 
-   Contents:
-   1. Tokens (color, type, spacing, radius, motion)
-   2. Reset & base
-   3. Typography
-   4. Layout primitives (container, section, grid background)
-   5. Buttons
-   6. Cards
-   7. Focus bar (signature dashboard component)
-   8. Navigation
-   9. Footer
-   10. Writeups / post content (code blocks, callouts, tables)
-   11. Utilities
-   12. Accessibility & motion
-   13. Responsive breakpoints
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. TOKENS
-   -------------------------------------------------------------------------- */
 :root {
   --bg: #0b0e14;
   --bg-elevated: #11151f;
@@ -79,8 +55,8 @@ ul, ol { padding-left: 1.25em; }
 hr { border: none; border-top: 1px solid var(--border); margin: var(--space-5) 0; }
 
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 var(--space-3); color: var(--text-primary); }
-h1 { font-size: clamp(2.25rem, 5vw + 1rem, 4rem); font-weight: 650; letter-spacing: -0.02em; }
-h2 { font-size: clamp(1.6rem, 2.5vw + 1rem, 2.25rem); }
+h1 { font-size: clamp(2.25rem, calc(5vw + 1rem), 4rem); font-weight: 650; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.6rem, calc(2.5vw + 1rem), 2.25rem); }
 h3 { font-size: 1.2rem; font-weight: 600; }
 p { margin: 0 0 var(--space-3); color: var(--text-secondary); }
 .lede { font-size: 1.15rem; color: var(--text-secondary); max-width: 60ch; }
@@ -173,18 +149,22 @@ a.card:hover, .card--interactive:hover { border-color: var(--border-strong); tra
 .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 0.5em; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 .skip-link { position: absolute; top: -40px; left: var(--space-3); background: var(--accent); color: #05201d; padding: 0.6em 1em; border-radius: var(--radius-sm); z-index: 100; font-family: var(--font-mono); font-size: 0.85rem; }
-.skip-link:focus { top: var(--space-2); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; } }
-@media (max-width: 720px) {
-  .nav-list { display: none; position: fixed; inset: var(--header-height) 0 0 0; background: var(--bg); flex-direction: column; padding: var(--space-5) var(--space-4); gap: var(--space-4); }
-  .nav-list.is-open { display: flex; animation: menu-in var(--duration) var(--ease); }
-  .nav-list a { font-size: 1rem; }
+.skip-link:focus { top: 0; }
+
+@keyframes blink { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
+
+@media (max-width: 760px) {
   .nav-toggle { display: inline-flex; }
-  .section { padding: var(--space-6) 0; }
-  .hero { padding: var(--space-6) 0 var(--space-5); }
-  .hero__dashboard { max-width: none; }
-  .focus-row { grid-template-columns: 76px 1fr; }
+  .nav-list { display: none; position: absolute; top: var(--header-height); left: 0; right: 0; padding: var(--space-3) var(--space-4); background: var(--bg-elevated); border-bottom: 1px solid var(--border); flex-direction: column; gap: 0; }
+  .nav-list.is-open { display: flex; }
+  .nav-list li { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .nav-list li:last-child { border-bottom: none; }
+  .hero { padding-top: var(--space-7); }
+  .section { padding: var(--space-7) 0; }
+  .focus-row { grid-template-columns: 1fr; gap: 0.25rem; }
 }
-@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
