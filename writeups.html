@@ -17,10 +17,13 @@
     <!-- Favicon: shield emoji, no file needed -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 
+    <!-- Markdown Parser (marked.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
     /* ==========================================================================
        VARIABLES — Edit these to change the entire look
-       ========================================================================= */
+       ========================================================================== */
     :root {
         --bg-primary: #0B0B0F;
         --bg-surface: #14141A;
@@ -177,7 +180,7 @@
         color: var(--accent);
     }
 
-    /* Tags (used in projects) */
+    /* Tags */
     .tags {
         display: flex;
         flex-wrap: wrap;
@@ -226,14 +229,14 @@
     }
 
     /* ==========================================================================
-       NAV — extras for the 4-link nav on small screens
+       NAV — extras for small screens
        ========================================================================== */
     .nav-links a[aria-current="page"] {
         color: var(--accent);
     }
     @media (max-width: 480px) {
         .nav-inner { gap: 0.75rem; }
-        .nav-logo { font-size: 0.8125rem white-space: nowrap; }
+        .nav-logo { font-size: 0.8125rem; white-space: nowrap; }
         .nav-links { gap: 0.875rem; }
         .nav-links a { font-size: 0.8125rem; white-space: nowrap; }
     }
@@ -245,7 +248,6 @@
     /* ==========================================================================
        WRITE-UPS — page header + card grid
        ========================================================================== */
-    /* body is a flex column, so without this <main> shrinks to its content and drifts out of line with the nav */
     main.container {
         width: 100%;
     }
@@ -323,27 +325,29 @@
     }
 
     /* ==========================================================================
-       OPENING A WRITE-UP — pure CSS, no JavaScript.
-       Each write-up is hidden until the URL points at it (writeups.html#its-id).
-       When one is open, the page header and the cards are hidden.
+       ARTICLE VIEW TOGGLE
        ========================================================================== */
-    .writeup {
+    .view-article #page-header,
+    .view-article #card-grid {
+        display: none !important;
+    }
+    #article-view {
         display: none;
         padding: 2.5rem 0 4rem;
     }
-    .writeup:target {
-        display: block;
+    .view-article #article-view {
+        display: block !important;
     }
-    .writeup {
-        scroll-margin-top: var(--nav-height);
-    }
-    body:has(.writeup:target) .page-header,
-    body:has(.writeup:target) .card-grid {
-        display: none;
+
+    .loading-indicator {
+        padding: 3rem 0;
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--text-muted);
     }
 
     /* ==========================================================================
-       WRITE-UP ARTICLE
+       WRITE-UP ARTICLE STYLES
        ========================================================================== */
     .back-link {
         display: inline-block;
@@ -351,6 +355,7 @@
         font-size: 0.8125rem;
         color: var(--text-muted);
         transition: color 0.15s ease;
+        cursor: pointer;
     }
     .back-link:hover {
         color: var(--accent);
@@ -390,7 +395,7 @@
         .writeup-header h1 { font-size: 2.5rem; }
     }
 
-    /* Article body — long-form reading styles (the reset strips bullets, margins, etc.) */
+    /* Article body — markdown output */
     .writeup-body {
         max-width: 72ch;
     }
@@ -432,11 +437,13 @@
     .writeup-body blockquote {
         border-left: 3px solid var(--accent);
         padding: 0.25rem 0 0.25rem 1rem;
+        color: var(--text-muted);
     }
     .writeup-body img {
         height: auto;
         border: 1px solid var(--border);
         border-radius: var(--radius);
+        margin: 1.5rem 0;
     }
     .writeup-body code {
         font-family: var(--font-mono);
@@ -469,6 +476,7 @@
         overflow-x: auto;
         border-collapse: collapse;
         font-size: 0.9375rem;
+        margin: 1.5rem 0;
     }
     .writeup-body th,
     .writeup-body td {
@@ -505,16 +513,9 @@
     <main id="main" class="container">
 
         <!-- =================================================================
-             HOW TO ADD A WRITE-UP (2 steps, both in this file)
-             1. Copy one <li>...</li> block inside the card grid below, and
-                change the link (#your-id), title, summary, tags and date.
-             2. Copy one <article class="writeup" id="your-id"> block further
-                down, give it the SAME id, and write your content inside.
-             The id must be lowercase with dashes, e.g. pcap-phishing-investigation.
-             The write-up then opens at writeups.html#your-id
+             PAGE HEADER (Cards list view)
              ================================================================= -->
-
-        <section class="page-header" aria-label="Write-ups">
+        <section class="page-header" id="page-header" aria-label="Write-ups">
             <h1 class="page-title">Write-ups</h1>
             <p class="page-intro">
                 Detection rules, investigations, and lab walkthroughs.
@@ -523,172 +524,17 @@
         </section>
 
         <!-- =================================================================
-             CARDS — newest first
+             CARDS GRID (Populated dynamically from writeups/manifest.json)
              ================================================================= -->
-        <ul class="card-grid" role="list">
-
-            <li>
-                <a class="writeup-card" href="#ssh-bruteforce-detection">
-                    <span class="writeup-card-meta">
-                        <span class="writeup-card-category">Detection</span>
-                        <time datetime="2026-10-07">Oct 7, 2026</time>
-                    </span>
-                    <h2 class="writeup-card-title">Detecting SSH Brute-Force with Wazuh</h2>
-                    <span class="writeup-card-summary">
-                        Custom Wazuh correlation rules that catch SSH brute-force patterns,
-                        with threshold-based alerting and automated response triggers.
-                    </span>
-                    <span class="tags">
-                        <span class="tag">Wazuh</span>
-                        <span class="tag">Detection Rules</span>
-                        <span class="tag">SSH</span>
-                        <span class="tag">Linux</span>
-                    </span>
-                    <span class="writeup-card-cta">Read write-up</span>
-                </a>
-            </li>
-
-            <li>
-                <a class="writeup-card" href="#pcap-phishing-investigation">
-                    <span class="writeup-card-meta">
-                        <span class="writeup-card-category">Investigation</span>
-                        <time datetime="2026-10-07">Oct 7, 2026</time>
-                    </span>
-                    <h2 class="writeup-card-title">PCAP Analysis &amp; Phishing Investigation</h2>
-                    <span class="writeup-card-summary">
-                        Network traffic analysis with Wireshark and tcpdump, plus a phishing
-                        email investigation with indicator extraction and threat assessment.
-                    </span>
-                    <span class="tags">
-                        <span class="tag">Wireshark</span>
-                        <span class="tag">tcpdump</span>
-                        <span class="tag">PCAP</span>
-                        <span class="tag">Phishing</span>
-                    </span>
-                    <span class="writeup-card-cta">Read write-up</span>
-                </a>
-            </li>
-
+        <ul class="card-grid" id="card-grid" role="list">
+            <li class="loading-indicator">Loading write-ups&hellip;</li>
         </ul>
 
         <!-- =================================================================
-             WRITE-UP 1 — SSH brute-force detection
-             Text in [square brackets] is a prompt: replace it with your own
-             words and results, then delete the brackets.
+             ARTICLE VIEW CONTAINER (Rendered dynamically from Markdown)
              ================================================================= -->
-        <article class="writeup" id="ssh-bruteforce-detection" aria-labelledby="ssh-bruteforce-detection-title">
-            <a href="writeups.html" class="back-link">&larr; All write-ups</a>
-
-            <header class="writeup-header">
-                <h1 id="ssh-bruteforce-detection-title">Detecting SSH Brute-Force with Wazuh</h1>
-                <p class="writeup-meta">
-                    <span>Detection</span> · <time datetime="2026-10-07">October 7, 2026</time>
-                </p>
-                <p class="writeup-summary">
-                    Custom Wazuh correlation rules that catch SSH brute-force patterns,
-                    with threshold-based alerting and automated response triggers.
-                </p>
-                <div class="tags">
-                    <span class="tag">Wazuh</span>
-                    <span class="tag">Detection Rules</span>
-                    <span class="tag">SSH</span>
-                    <span class="tag">Linux</span>
-                </div>
-            </header>
-
-            <div class="writeup-body">
-                <h2>Objective</h2>
-                <p>[What are you detecting, and why does it matter to a SOC? One or two sentences.]</p>
-
-                <h2>Lab setup</h2>
-                <p>[Which machines are involved (attacker, target, Wazuh manager and agent) and how they are connected.]</p>
-
-                <h2>Simulating the attack</h2>
-                <p>[The tool or command you used to generate the brute-force traffic, and what the raw logs look like on the target.]</p>
-                <pre><code># [paste the command you ran, with real targets masked]</code></pre>
-
-                <h2>Detection logic</h2>
-                <p>[How the rule works: which base rule it builds on, the threshold, the time window, and why you chose those values.]</p>
-                <pre><code>&lt;!-- [paste your Wazuh rule here] --&gt;</code></pre>
-
-                <h2>Results</h2>
-                <p>[Screenshots of the alert in the Wazuh dashboard, and what the automated response did.]</p>
-                <!-- Screenshot example (put the image next to this file or in an images/ folder):
-                     <img src="images/ssh-alert.png" alt="Wazuh alert for SSH brute-force" loading="lazy"> -->
-
-                <h2>MITRE ATT&amp;CK mapping</h2>
-                <table>
-                    <thead>
-                        <tr><th>Technique</th><th>ID</th><th>Why it applies</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Brute Force</td><td>T1110</td><td>[add the sub-technique that matches what you tested]</td></tr>
-                    </tbody>
-                </table>
-
-                <h2>What I'd improve</h2>
-                <p>[False positives you saw, tuning you'd do, and what you'd test next.]</p>
-            </div>
-
-            <footer class="writeup-footer">
-                <a href="writeups.html" class="back-link">&larr; All write-ups</a>
-            </footer>
-        </article>
-
-        <!-- =================================================================
-             WRITE-UP 2 — PCAP analysis & phishing investigation
-             ================================================================= -->
-        <article class="writeup" id="pcap-phishing-investigation" aria-labelledby="pcap-phishing-investigation-title">
-            <a href="writeups.html" class="back-link">&larr; All write-ups</a>
-
-            <header class="writeup-header">
-                <h1 id="pcap-phishing-investigation-title">PCAP Analysis &amp; Phishing Investigation</h1>
-                <p class="writeup-meta">
-                    <span>Investigation</span> · <time datetime="2026-10-07">October 7, 2026</time>
-                </p>
-                <p class="writeup-summary">
-                    Network traffic analysis with Wireshark and tcpdump, plus a phishing
-                    email investigation with indicator extraction and threat assessment.
-                </p>
-                <div class="tags">
-                    <span class="tag">Wireshark</span>
-                    <span class="tag">tcpdump</span>
-                    <span class="tag">PCAP</span>
-                    <span class="tag">Phishing</span>
-                </div>
-            </header>
-
-            <div class="writeup-body">
-                <h2>Scenario</h2>
-                <p>[What was the capture or email, and what question were you trying to answer?]</p>
-
-                <h2>Tools and approach</h2>
-                <p>[Which filters, commands, and headers you looked at, and in what order.]</p>
-                <pre><code># [e.g. the tcpdump or tshark command you used]</code></pre>
-
-                <h2>Findings</h2>
-                <ul>
-                    <li>[Indicator or observation 1]</li>
-                    <li>[Indicator or observation 2]</li>
-                </ul>
-
-                <h2>Indicators of compromise</h2>
-                <table>
-                    <thead>
-                        <tr><th>Type</th><th>Value</th><th>Notes</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>[Domain / IP / hash]</td><td>[defanged value, e.g. hxxp://example[.]com]</td><td>[context]</td></tr>
-                    </tbody>
-                </table>
-
-                <h2>Verdict and next steps</h2>
-                <p>[Your assessment, and what a SOC analyst would do next: block, escalate, notify the user.]</p>
-            </div>
-
-            <footer class="writeup-footer">
-                <a href="writeups.html" class="back-link">&larr; All write-ups</a>
-            </footer>
+        <article id="article-view" aria-live="polite">
+            <!-- Content injected here via JavaScript -->
         </article>
 
     </main>
@@ -707,5 +553,189 @@
             </div>
         </div>
     </footer>
+
+    <!-- =====================================================================
+         AUTOMATIC MARKDOWN LOADER & RENDERER
+         ===================================================================== -->
+    <script>
+    (function() {
+        'use strict';
+
+        var DEFAULT_MANIFEST = [
+            'ssh-bruteforce-detection.md',
+            'pcap-phishing-investigation.md'
+        ];
+
+        var postsCache = {};
+        var cardGrid = document.getElementById('card-grid');
+        var articleView = document.getElementById('article-view');
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[m];
+            });
+        }
+
+        function parseFrontmatter(rawText) {
+            var match = rawText.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+            if (!match) {
+                return { meta: {}, content: rawText };
+            }
+            var rawMeta = match[1];
+            var content = match[2];
+            var meta = {};
+            rawMeta.split(/\r?\n/).forEach(function(line) {
+                var colonIndex = line.indexOf(':');
+                if (colonIndex !== -1) {
+                    var key = line.slice(0, colonIndex).trim().toLowerCase();
+                    var value = line.slice(colonIndex + 1).trim();
+                    meta[key] = value;
+                }
+            });
+            return { meta: meta, content: content };
+        }
+
+        function loadPosts() {
+            fetch('writeups/manifest.json')
+                .then(function(res) {
+                    if (res.ok) return res.json();
+                    throw new Error('Manifest fetch failed');
+                })
+                .catch(function() {
+                    return DEFAULT_MANIFEST;
+                })
+                .then(function(files) {
+                    var fetchPromises = files.map(function(file) {
+                        var slug = file.replace(/\.md$/, '');
+                        return fetch('writeups/' + file)
+                            .then(function(res) {
+                                if (res.ok) return res.text();
+                                throw new Error('Failed to load ' + file);
+                            })
+                            .then(function(text) {
+                                var parsed = parseFrontmatter(text);
+                                return {
+                                    file: file,
+                                    slug: slug,
+                                    meta: parsed.meta,
+                                    content: parsed.content
+                                };
+                            })
+                            .catch(function(err) {
+                                console.warn('Could not load writeup:', file, err);
+                                return null;
+                            });
+                    });
+
+                    return Promise.all(fetchPromises);
+                })
+                .then(function(posts) {
+                    cardGrid.innerHTML = '';
+                    postsCache = {};
+
+                    posts.filter(Boolean).forEach(function(post) {
+                        postsCache[post.slug] = post;
+
+                        var li = document.createElement('li');
+                        var tags = (post.meta.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+                        var tagsHtml = tags.map(function(t) {
+                            return '<span class="tag">' + escapeHtml(t) + '</span>';
+                        }).join('');
+
+                        li.innerHTML =
+                            '<a class="writeup-card" href="#' + encodeURIComponent(post.slug) + '">' +
+                                '<span class="writeup-card-meta">' +
+                                    '<span class="writeup-card-category">' + escapeHtml(post.meta.category || 'Analysis') + '</span>' +
+                                    '<time>' + escapeHtml(post.meta.date || '') + '</time>' +
+                                '</span>' +
+                                '<h2 class="writeup-card-title">' + escapeHtml(post.meta.title || post.slug) + '</h2>' +
+                                '<span class="writeup-card-summary">' +
+                                    escapeHtml(post.meta.summary || '') +
+                                '</span>' +
+                                (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
+                                '<span class="writeup-card-cta">Read write-up &rarr;</span>' +
+                            '</a>';
+
+                        cardGrid.appendChild(li);
+                    });
+
+                    handleRoute();
+                });
+        }
+
+        function renderArticle(post) {
+            var tags = (post.meta.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+            var tagsHtml = tags.map(function(t) {
+                return '<span class="tag">' + escapeHtml(t) + '</span>';
+            }).join('');
+
+            var bodyHtml = typeof marked !== 'undefined' ? marked.parse(post.content) : post.content;
+
+            articleView.innerHTML =
+                '<a href="writeups.html" class="back-link">&larr; All write-ups</a>' +
+                '<header class="writeup-header">' +
+                    '<h1>' + escapeHtml(post.meta.title || post.slug) + '</h1>' +
+                    '<p class="writeup-meta">' +
+                        '<span>' + escapeHtml(post.meta.category || 'Analysis') + '</span>' +
+                        (post.meta.date ? ' · <time>' + escapeHtml(post.meta.date) + '</time>' : '') +
+                    '</p>' +
+                    (post.meta.summary ? '<p class="writeup-summary">' + escapeHtml(post.meta.summary) + '</p>' : '') +
+                    (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
+                '</header>' +
+                '<div class="writeup-body">' + bodyHtml + '</div>' +
+                '<footer class="writeup-footer">' +
+                    '<a href="writeups.html" class="back-link">&larr; All write-ups</a>' +
+                '</footer>';
+
+            articleView.querySelectorAll('.back-link').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (window.history.pushState) {
+                        window.history.pushState('', document.title, window.location.pathname + window.location.search);
+                        handleRoute();
+                    } else {
+                        window.location.hash = '';
+                    }
+                });
+            });
+        }
+
+        function handleRoute() {
+            var hash = window.location.hash.replace(/^#/, '');
+
+            if (!hash) {
+                document.body.classList.remove('view-article');
+                articleView.innerHTML = '';
+                return;
+            }
+
+            var post = postsCache[hash];
+            if (post) {
+                document.body.classList.add('view-article');
+                renderArticle(post);
+                window.scrollTo(0, 0);
+            } else if (Object.keys(postsCache).length > 0) {
+                document.body.classList.add('view-article');
+                articleView.innerHTML =
+                    '<a href="writeups.html" class="back-link">&larr; All write-ups</a>' +
+                    '<div style="padding: 4rem 0;">' +
+                        '<h1>Write-up Not Found</h1>' +
+                        '<p style="margin-top: 1rem; color: var(--text-muted);">The write-up <code>#' + escapeHtml(hash) + '</code> was not found.</p>' +
+                    '</div>';
+                window.scrollTo(0, 0);
+            }
+        }
+
+        window.addEventListener('hashchange', handleRoute);
+        loadPosts();
+    })();
+    </script>
 </body>
 </html>
