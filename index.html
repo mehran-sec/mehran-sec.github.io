@@ -21,6 +21,9 @@
     <!-- Favicon: shield emoji, no file needed -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 
+    <!-- Markdown Parser for Mehran AI -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
     /* ==========================================================================
        VARIABLES — Edit these to change the entire look
@@ -298,97 +301,225 @@
     }
 
     /* ==========================================================================
-       PROJECTS
+        PROJECTS — Featured Work & Recent Write-ups
        ========================================================================== */
 
-    /* Featured project — full-width card with accent left border */
-    .project-featured {
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-left: 3px solid var(--accent);
-        border-radius: var(--radius);
-        padding: 2rem;
-        margin-bottom: 2rem;
+    /* Section header with right action link */
+    .section-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.75rem;
     }
-    .project-featured h3 {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
+    .section-header-titles {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
     }
-    .project-featured > p {
-        max-width: 65ch;
-        margin-bottom: 1.25rem;
-        line-height: 1.8;
+    .section-header-titles .section-title {
+        margin-bottom: 0;
+    }
+    .section-subtitle {
+        color: var(--text-muted);
+        font-size: 0.9375rem;
+    }
+    .section-view-all {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        color: var(--accent);
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: color 0.15s ease, transform 0.15s ease;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+    .section-view-all:hover {
+        color: var(--accent-hover);
+        transform: translateX(2px);
     }
 
-    /* Pipeline visualization */
-    .pipeline {
+    /* Featured Work Grid — 3 columns */
+    .featured-work-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+    }
+    @media (min-width: 960px) {
+        .featured-work-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .project-card-new {
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+    .project-card-new:hover {
+        border-color: var(--accent);
+        background-color: var(--bg-elevated);
+        transform: translateY(-2px);
+    }
+    .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+    .project-card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        background: rgba(168, 198, 108, 0.08);
+        border: 1px solid rgba(168, 198, 108, 0.22);
+        color: var(--accent);
         display: flex;
         align-items: center;
-        gap: 0.375rem;
-        flex-wrap: wrap;
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
-        padding: 1rem;
-        background: var(--bg-primary);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        margin-bottom: 1.25rem;
-    }
-    .pipeline-node {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.125rem;
-        padding: 0.375rem 0.75rem;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        background: var(--bg-surface);
-        color: var(--text-primary);
-        white-space: nowrap;
-        transition: border-color 0.15s ease;
-    }
-    .pipeline-node:hover {
-        border-color: var(--accent);
-    }
-    .pipeline-sub {
-        font-size: 0.625rem;
-        color: var(--text-muted);
-        font-weight: 400;
-    }
-    .pipeline-arrow {
-        color: var(--accent);
-        font-size: 0.875rem;
-        line-height: 1;
+        justify-content: center;
         flex-shrink: 0;
     }
+    .project-card-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    .project-card-badge {
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        color: var(--accent);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+    }
+    .project-card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.625rem;
+        line-height: 1.3;
+    }
+    .project-card-desc {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin-bottom: 1.25rem;
+        flex-grow: 1;
+    }
+    .project-card-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        margin-top: auto;
+    }
+    .project-card-footer .tags {
+        margin-bottom: 0;
+    }
+    .project-repo-link {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: color 0.15s ease;
+        text-decoration: none;
+    }
+    .project-repo-link:hover {
+        color: var(--accent-hover);
+        text-decoration: underline;
+    }
 
-    /* Project grid — 2 columns, border-top accent */
-    .project-grid {
+    /* Recent Write-ups Grid — 3 columns */
+    .recent-writeups-grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+        gap: 1.25rem;
     }
-    .project-card {
-        border-top: 2px solid var(--border);
-        padding-top: 1.25rem;
-        transition: border-color 0.15s ease;
-    }
-    .project-card:hover {
-        border-color: var(--accent);
-    }
-    .project-card h3 {
-        font-size: 1.0625rem;
-        margin-bottom: 0.5rem;
-    }
-    .project-card p {
-        font-size: 0.9375rem;
-        line-height: 1.7;
-        margin-bottom: 0.75rem;
-        max-width: 60ch;
+    @media (min-width: 960px) {
+        .recent-writeups-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
 
-    @media (min-width: 640px) {
-        .project-grid { grid-template-columns: 1fr 1fr; }
+    .writeup-compact-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.125rem 1.25rem;
+        text-decoration: none;
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+    .writeup-compact-card:hover {
+        border-color: var(--accent);
+        background-color: var(--bg-elevated);
+        transform: translateY(-2px);
+    }
+    .writeup-compact-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 6px;
+        background: rgba(168, 198, 108, 0.08);
+        border: 1px solid rgba(168, 198, 108, 0.22);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .writeup-compact-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .writeup-compact-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        flex-grow: 1;
+        min-width: 0;
+    }
+    .writeup-compact-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: color 0.15s ease;
+    }
+    .writeup-compact-card:hover .writeup-compact-title {
+        color: var(--accent);
+    }
+    .writeup-compact-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        color: var(--text-muted);
+    }
+    .writeup-compact-tag {
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        color: var(--text-muted);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
     }
 
     /* Tags (used in projects) */
@@ -666,10 +797,10 @@
          ===================================================================== -->
     <header class="nav" role="banner">
         <div class="nav-inner">
-            <a href="#" class="nav-logo">Mehran Khan</a>
+            <a href="index.html" class="nav-logo">Mehran Khan</a>
             <nav class="nav-links" aria-label="Main navigation">
                 <a href="#about">About</a>
-                <a href="#work">Work</a>
+                <a href="work.html">Work</a>
                 <a href="writeups.html">Write-ups</a>
                 <a href="#contact">Contact</a>
             </nav>
@@ -701,7 +832,7 @@
                 </div>
 
                 <div class="hero-photo">
-                    <img src="Profile Pic.jpeg" alt="Mehran Khan — Junior SOC Analyst" width="240" height="240" loading="eager">
+                    <img src="New Pic.jpeg" alt="Mehran Khan — Junior SOC Analyst" width="240" height="240" loading="eager">
                 </div>
             </div>
         </section>
@@ -713,7 +844,7 @@
             <h2 class="section-title">About</h2>
             <div class="about-body">
                 <p>
-                    BS Cyber Security student at Leads University, Lahore. I focus on
+                    BS Cyber Security student at Lahore Leads University (3rd Semester). I focus on
                     defensive security and SOC operations — building practical detection
                     systems rather than only studying theory.
                 </p>
@@ -724,138 +855,178 @@
                 </p>
             </div>
             <div class="about-meta">
-                <!-- EDIT: Update GPA if it changes -->
-                <span>3.94 GPA</span>, 1st semester ·
-                <!-- EDIT: Change city or availability if needed -->
-                Lahore, Pakistan · Open to remote roles
+                <span>🎓 BS Cyber Security</span> · Lahore Leads University · 3rd Semester · Open to remote roles
             </div>
         </section>
 
         <!-- =================================================================
-             WORK — Projects
+             WORK — Featured Work & Recent Write-ups
              ================================================================= -->
-        <section id="work" class="section" aria-label="Projects">
-            <h2 class="section-title">Work</h2>
+        <section id="work" class="section" aria-label="Featured Work and Recent Write-ups" data-buddy-mood="guard">
 
-            <!-- FEATURED: AI-Augmented SOC Pipeline -->
-            <article class="project-featured">
-                <h3>AI-Augmented SOC Pipeline</h3>
-
-                <!-- Pipeline flow visualization -->
-                <div class="pipeline" role="img" aria-label="Pipeline flow: Wazuh alerts to n8n orchestration to threat intelligence to AI triage to Slack and Jira notifications">
-                    <div class="pipeline-node">
-                        <span>Wazuh</span>
-                        <span class="pipeline-sub">SIEM Alerts</span>
-                    </div>
-                    <span class="pipeline-arrow" aria-hidden="true">→</span>
-                    <div class="pipeline-node">
-                        <span>n8n</span>
-                        <span class="pipeline-sub">Orchestration</span>
-                    </div>
-                    <span class="pipeline-arrow" aria-hidden="true">→</span>
-                    <div class="pipeline-node">
-                        <span>Threat Intel</span>
-                        <span class="pipeline-sub">AbuseIPDB · VT</span>
-                    </div>
-                    <span class="pipeline-arrow" aria-hidden="true">→</span>
-                    <div class="pipeline-node">
-                        <span>AI Triage</span>
-                        <span class="pipeline-sub">Claude API</span>
-                    </div>
-                    <span class="pipeline-arrow" aria-hidden="true">→</span>
-                    <div class="pipeline-node">
-                        <span>Slack / Jira</span>
-                        <span class="pipeline-sub">Notifications</span>
-                    </div>
+            <!-- Part 1: FEATURED WORK -->
+            <div class="section-header-row">
+                <div class="section-header-titles">
+                    <h2 class="section-title">Featured Work</h2>
+                    <p class="section-subtitle">A selection of my recent projects and latest write-up.</p>
                 </div>
-
-                <p>
-                    An automated SOC workflow that ingests Wazuh SIEM alerts, enriches
-                    suspicious IPs through AbuseIPDB and VirusTotal, calculates a
-                    composite risk score, uses Claude AI for contextual triage, and
-                    routes actionable alerts to Slack and Jira.
-                </p>
-
-                <div class="tags">
-                    <span class="tag">Wazuh</span>
-                    <span class="tag">n8n</span>
-                    <span class="tag">Docker</span>
-                    <span class="tag">Linux</span>
-                    <span class="tag">Claude API</span>
-                    <span class="tag">VirusTotal</span>
-                    <span class="tag">AbuseIPDB</span>
-                    <span class="tag">Slack</span>
-                    <span class="tag">Jira</span>
-                </div>
-
-                <div class="project-links">
-                    <!-- EDIT: Replace with your actual repo URL -->
-                    <a href="https://github.com/mehran-sec/Ai_Augmented_SOC"
-                       target="_blank" rel="noopener noreferrer">GitHub Repo</a>
-                </div>
-            </article>
-
-            <!-- SECONDARY PROJECTS — 2x2 grid -->
-            <div class="project-grid">
-
-                <article class="project-card">
-                    <h3>Home Lab Environment</h3>
-                    <p>
-                        Wazuh SIEM in Docker, Kali Linux, Ubuntu with Wazuh agent,
-                        Metasploitable, Nessus, and Windows Server — running on
-                        KVM/virt-manager. Used for detection rule development, log
-                        analysis, and vulnerability assessment.
-                    </p>
-                    <div class="tags">
-                        <span class="tag">Wazuh</span>
-                        <span class="tag">KVM</span>
-                        <span class="tag">Docker</span>
-                        <span class="tag">Kali</span>
-                        <span class="tag">Nessus</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
-                           target="_blank" rel="noopener noreferrer">GitHub Repo</a>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <h3>SSH Brute-Force Detection</h3>
-                    <p>
-                        Custom Wazuh correlation rules for detecting SSH brute-force
-                        patterns. Includes threshold-based alerting and automated
-                        response triggers.
-                    </p>
-                    <div class="tags">
-                        <span class="tag">Wazuh</span>
-                        <span class="tag">Detection Rules</span>
-                        <span class="tag">SSH</span>
-                        <span class="tag">Linux</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="writeups.html#ssh-bruteforce-detection">Writeup</a>
-                    </div>
-                </article>
-
-                <article class="project-card">
-                    <h3>PCAP Analysis &amp; Phishing Investigation</h3>
-                    <p>
-                        Network traffic analysis using Wireshark and tcpdump. Phishing
-                        email investigation with indicator extraction and threat
-                        assessment.
-                    </p>
-                    <div class="tags">
-                        <span class="tag">Wireshark</span>
-                        <span class="tag">tcpdump</span>
-                        <span class="tag">PCAP</span>
-                        <span class="tag">Phishing</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="writeups.html#pcap-phishing-investigation">Writeup</a>
-                    </div>
-                </article>
-
+                <a href="work.html" class="section-view-all">View all work &rarr;</a>
             </div>
+
+            <div class="featured-work-grid">
+                <!-- Project 1: AI-Augmented SOC L1 Pipeline -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">Project</span>
+                    </div>
+                    <h3 class="project-card-title">AI-Augmented SOC L1 Pipeline</h3>
+                    <p class="project-card-desc">
+                        End-to-end lab with Wazuh &rarr; n8n &rarr; Claude AI triage. Automated threat enrichment, risk scoring, and incident dispatch to Slack &amp; Jira.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">n8n</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">AI</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Ai_Augmented_SOC"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 2: Wazuh Detection Engineering -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/>
+                                <rect width="20" height="8" x="2" y="14" rx="2" ry="2"/>
+                                <line x1="6" x2="6.01" y1="6" y2="6"/>
+                                <line x1="6" x2="6.01" y1="18" y2="18"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">Project</span>
+                    </div>
+                    <h3 class="project-card-title">Wazuh Detection Engineering</h3>
+                    <p class="project-card-desc">
+                        Custom correlation rules, MITRE ATT&amp;CK mapping, brute-force frequency alerting, and automated active response mechanisms.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">MITRE ATT&CK</span>
+                            <span class="tag">Linux</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 3: Enterprise SOC Home Lab -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                <polyline points="2 17 12 22 22 17"/>
+                                <polyline points="2 12 12 17 22 12"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">Project</span>
+                    </div>
+                    <h3 class="project-card-title">Enterprise SOC Home Lab</h3>
+                    <p class="project-card-desc">
+                        Multi-node virtualized security operations environment with Wazuh in Docker, Kali, Metasploitable, Nessus, and Windows Server on KVM.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">KVM</span>
+                            <span class="tag">Docker</span>
+                            <span class="tag">Kali</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Part 2: RECENT WRITE-UPS -->
+            <div class="section-header-row">
+                <div class="section-header-titles">
+                    <h2 class="section-title">Recent Write-ups</h2>
+                </div>
+                <a href="writeups.html" class="section-view-all">View all write-ups &rarr;</a>
+            </div>
+
+            <div class="recent-writeups-grid">
+                <!-- Writeup 1: n8n SOC Alert Pipeline -->
+                <a href="writeups.html#n8n-soc-alert-pipeline" class="writeup-compact-card">
+                    <div class="writeup-compact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <line x1="3" x2="9" y1="12" y2="12"/>
+                            <line x1="15" x2="21" y1="12" y2="12"/>
+                        </svg>
+                    </div>
+                    <div class="writeup-compact-content">
+                        <h3 class="writeup-compact-title">Building an AI-Assisted SOC Alert Pipeline in n8n</h3>
+                        <div class="writeup-compact-meta">
+                            <time>Oct 8, 2026</time>
+                            <span class="writeup-compact-tag">Automation</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Writeup 2: Detecting SSH Brute-Force with Wazuh -->
+                <a href="writeups.html#ssh-bruteforce-detection" class="writeup-compact-card">
+                    <div class="writeup-compact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="writeup-compact-content">
+                        <h3 class="writeup-compact-title">Detecting SSH Brute-Force with Wazuh</h3>
+                        <div class="writeup-compact-meta">
+                            <time>Oct 7, 2026</time>
+                            <span class="writeup-compact-tag">Detection</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Writeup 3: PCAP Analysis & Phishing Investigation -->
+                <a href="writeups.html#pcap-phishing-investigation" class="writeup-compact-card">
+                    <div class="writeup-compact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" x2="16.65" y1="21" y2="16.65"/>
+                            <path d="m8 11 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="writeup-compact-content">
+                        <h3 class="writeup-compact-title">PCAP Analysis &amp; Phishing Investigation</h3>
+                        <div class="writeup-compact-meta">
+                            <time>Oct 7, 2026</time>
+                            <span class="writeup-compact-tag">Investigation</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         </section>
 
         <!-- =================================================================
@@ -914,8 +1085,7 @@
                         BS Cyber Security
                         <span class="timeline-badge active">active</span>
                     </span>
-                    <!-- EDIT: Update semester / GPA as needed -->
-                    <span class="timeline-meta">Leads University, Lahore · 3.94 GPA, 1st semester</span>
+                    <span class="timeline-meta">Lahore Leads University · 3rd Semester</span>
                 </li>
                 <li class="timeline-item is-progress">
                     <span class="timeline-title">
@@ -943,7 +1113,7 @@
         <!-- =================================================================
              CONTACT
              ================================================================= -->
-        <section id="contact" class="section" aria-label="Contact">
+        <section id="contact" class="section" aria-label="Contact" data-buddy-mood="happy">
             <h2 class="section-title">Get in Touch</h2>
             <p class="contact-intro">
                 Open to Junior SOC Analyst and L1 Security Operations roles at MSSPs
@@ -1084,5 +1254,7 @@
         }
     })();
     </script>
+    <!-- Mehran AI Portfolio Assistant Widget -->
+    <script src="chatbot.js"></script>
 </body>
 </html>

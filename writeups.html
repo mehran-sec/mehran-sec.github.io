@@ -264,64 +264,134 @@
         font-size: 1.0625rem;
     }
 
+    /* Filter Bar */
+    .filter-bar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.75rem;
+    }
+    .filter-btn {
+        font-family: var(--font-sans);
+        font-size: 0.8125rem;
+        font-weight: 500;
+        padding: 0.38rem 0.95rem;
+        border-radius: 9999px;
+        border: 1px solid var(--border);
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        user-select: none;
+    }
+    .filter-btn:hover {
+        border-color: var(--accent);
+        color: var(--text-primary);
+    }
+    .filter-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--bg-primary);
+        font-weight: 600;
+    }
+
+    /* Cards Grid — 3 Columns */
     .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
         gap: 1.5rem;
         padding: 2rem 0 4rem;
+        list-style: none;
+    }
+    @media (min-width: 960px) {
+        .card-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
     .card-grid > li {
         display: flex;
     }
+
+    /* Redesigned Write-up Card */
     .writeup-card {
         display: flex;
         flex-direction: column;
         flex: 1;
         background: var(--bg-surface);
         border: 1px solid var(--border);
-        border-top: 2px solid var(--border);
-        border-radius: var(--radius);
+        border-radius: 8px;
         padding: 1.5rem;
-        transition: border-color 0.15s ease, background-color 0.15s ease;
+        text-decoration: none;
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
     }
     .writeup-card:hover {
-        border-top-color: var(--accent);
-        background: var(--bg-elevated);
+        border-color: var(--accent);
+        background-color: var(--bg-elevated);
+        transform: translateY(-2px);
     }
-    .writeup-card-meta {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
-        color: var(--text-muted);
-    }
-    .writeup-card-category {
+    .writeup-card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 6px;
+        background: rgba(168, 198, 108, 0.08);
+        border: 1px solid rgba(168, 198, 108, 0.22);
         color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+    }
+    .writeup-card-icon svg {
+        width: 20px;
+        height: 20px;
     }
     .writeup-card-title {
         font-size: 1.0625rem;
-        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.35;
+        margin-bottom: 0.85rem;
         transition: color 0.15s ease;
     }
     .writeup-card:hover .writeup-card-title {
         color: var(--accent);
     }
-    .writeup-card-summary {
-        font-size: 0.9375rem;
-        line-height: 1.7;
-        margin-bottom: 1rem;
-    }
     .writeup-card .tags {
-        margin-bottom: 1.25rem;
-    }
-    .writeup-card-cta {
+        margin-bottom: 1.5rem;
         margin-top: auto;
+    }
+    .writeup-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
         font-family: var(--font-mono);
-        font-size: 0.8125rem;
-        font-weight: 500;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: auto;
+    }
+    .writeup-card-arrow {
         color: var(--accent);
+        font-size: 0.95rem;
+        line-height: 1;
+        transition: transform 0.15s ease;
+    }
+    .writeup-card:hover .writeup-card-arrow {
+        transform: translateX(3px);
+    }
+
+    .no-writeups {
+        grid-column: 1 / -1;
+        padding: 3rem 1rem;
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        background: var(--bg-surface);
+        border: 1px dashed var(--border);
+        border-radius: 8px;
     }
 
     /* ==========================================================================
@@ -440,10 +510,13 @@
         color: var(--text-muted);
     }
     .writeup-body img {
+        max-width: 100%;
         height: auto;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         margin: 1.5rem 0;
+        background: var(--bg-surface);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     .writeup-body code {
         font-family: var(--font-mono);
@@ -503,7 +576,7 @@
             <a href="index.html" class="nav-logo">Mehran Khan</a>
             <nav class="nav-links" aria-label="Main navigation">
                 <a href="index.html#about">About</a>
-                <a href="index.html#work">Work</a>
+                <a href="work.html">Work</a>
                 <a href="writeups.html" aria-current="page">Write-ups</a>
                 <a href="index.html#contact">Contact</a>
             </nav>
@@ -518,9 +591,18 @@
         <section class="page-header" id="page-header" aria-label="Write-ups">
             <h1 class="page-title">Write-ups</h1>
             <p class="page-intro">
-                Detection rules, investigations, and lab walkthroughs.
-                Select a card to read the full write-up.
+                Detailed notes, labs, and technical write-ups on cybersecurity, detection engineering, and tools I'm learning.
             </p>
+
+            <!-- Topic Filter Pills Bar -->
+            <div class="filter-bar" id="filter-bar" role="tablist" aria-label="Filter write-ups by topic">
+                <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
+                <button type="button" class="filter-btn" data-filter="linux" role="tab" aria-selected="false">Linux</button>
+                <button type="button" class="filter-btn" data-filter="detection" role="tab" aria-selected="false">Detection</button>
+                <button type="button" class="filter-btn" data-filter="network" role="tab" aria-selected="false">Network Security</button>
+                <button type="button" class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web Security</button>
+                <button type="button" class="filter-btn" data-filter="soc" role="tab" aria-selected="false">SOC</button>
+            </div>
         </section>
 
         <!-- =================================================================
@@ -562,11 +644,14 @@
         'use strict';
 
         var DEFAULT_MANIFEST = [
+            'n8n-soc-alert-pipeline.md',
             'ssh-bruteforce-detection.md',
             'pcap-phishing-investigation.md'
         ];
 
         var postsCache = {};
+        var allPosts = [];
+        var activeFilter = 'all';
         var cardGrid = document.getElementById('card-grid');
         var articleView = document.getElementById('article-view');
 
@@ -603,7 +688,8 @@
         }
 
         function loadPosts() {
-            fetch('writeups/manifest.json')
+            var manifestUrl = 'writeups/manifest.json?v=' + Date.now();
+            fetch(manifestUrl, { cache: 'no-store' })
                 .then(function(res) {
                     if (res.ok) return res.json();
                     throw new Error('Manifest fetch failed');
@@ -614,7 +700,7 @@
                 .then(function(files) {
                     var fetchPromises = files.map(function(file) {
                         var slug = file.replace(/\.md$/, '');
-                        return fetch('writeups/' + file)
+                        return fetch('writeups/' + file + '?v=' + Date.now(), { cache: 'no-store' })
                             .then(function(res) {
                                 if (res.ok) return res.text();
                                 throw new Error('Failed to load ' + file);
@@ -637,37 +723,100 @@
                     return Promise.all(fetchPromises);
                 })
                 .then(function(posts) {
-                    cardGrid.innerHTML = '';
+                    allPosts = posts.filter(Boolean);
                     postsCache = {};
-
-                    posts.filter(Boolean).forEach(function(post) {
+                    allPosts.forEach(function(post) {
                         postsCache[post.slug] = post;
-
-                        var li = document.createElement('li');
-                        var tags = (post.meta.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean);
-                        var tagsHtml = tags.map(function(t) {
-                            return '<span class="tag">' + escapeHtml(t) + '</span>';
-                        }).join('');
-
-                        li.innerHTML =
-                            '<a class="writeup-card" href="#' + encodeURIComponent(post.slug) + '">' +
-                                '<span class="writeup-card-meta">' +
-                                    '<span class="writeup-card-category">' + escapeHtml(post.meta.category || 'Analysis') + '</span>' +
-                                    '<time>' + escapeHtml(post.meta.date || '') + '</time>' +
-                                '</span>' +
-                                '<h2 class="writeup-card-title">' + escapeHtml(post.meta.title || post.slug) + '</h2>' +
-                                '<span class="writeup-card-summary">' +
-                                    escapeHtml(post.meta.summary || '') +
-                                '</span>' +
-                                (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
-                                '<span class="writeup-card-cta">Read write-up &rarr;</span>' +
-                            '</a>';
-
-                        cardGrid.appendChild(li);
                     });
 
+                    renderCards();
+                    setupFilters();
                     handleRoute();
                 });
+        }
+
+        function postMatchesFilter(post, filter) {
+            if (filter === 'all') return true;
+            var category = (post.meta.category || '').toLowerCase();
+            var tags = (post.meta.tags || '').toLowerCase();
+            var title = (post.meta.title || '').toLowerCase();
+            var fullText = category + ' ' + tags + ' ' + title;
+
+            if (filter === 'linux') {
+                return fullText.indexOf('linux') !== -1;
+            }
+            if (filter === 'detection') {
+                return fullText.indexOf('detection') !== -1;
+            }
+            if (filter === 'network') {
+                return fullText.indexOf('network') !== -1 || fullText.indexOf('pcap') !== -1 || fullText.indexOf('wireshark') !== -1;
+            }
+            if (filter === 'web') {
+                return fullText.indexOf('web') !== -1 || fullText.indexOf('owasp') !== -1;
+            }
+            if (filter === 'soc') {
+                return fullText.indexOf('soc') !== -1 || fullText.indexOf('wazuh') !== -1 || fullText.indexOf('soar') !== -1;
+            }
+            return false;
+        }
+
+        function renderCards() {
+            cardGrid.innerHTML = '';
+            var filtered = allPosts.filter(function(post) {
+                return postMatchesFilter(post, activeFilter);
+            });
+
+            if (filtered.length === 0) {
+                var emptyLi = document.createElement('li');
+                emptyLi.className = 'no-writeups';
+                emptyLi.textContent = 'No write-ups found in this category yet.';
+                cardGrid.appendChild(emptyLi);
+                return;
+            }
+
+            filtered.forEach(function(post) {
+                var li = document.createElement('li');
+                var tags = (post.meta.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+                var tagsHtml = tags.map(function(t) {
+                    return '<span class="tag">' + escapeHtml(t) + '</span>';
+                }).join('');
+
+                li.innerHTML =
+                    '<a class="writeup-card" href="#' + encodeURIComponent(post.slug) + '">' +
+                        '<div class="writeup-card-icon" aria-hidden="true">' +
+                            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                                '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+                                '<polyline points="14 2 14 8 20 8"/>' +
+                                '<line x1="16" y1="13" x2="8" y2="13"/>' +
+                                '<line x1="16" y1="17" x2="8" y2="17"/>' +
+                            '</svg>' +
+                        '</div>' +
+                        '<h2 class="writeup-card-title">' + escapeHtml(post.meta.title || post.slug) + '</h2>' +
+                        (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
+                        '<div class="writeup-card-footer">' +
+                            '<time>' + escapeHtml(post.meta.date || '') + '</time>' +
+                            '<span class="writeup-card-arrow">&rarr;</span>' +
+                        '</div>' +
+                    '</a>';
+
+                cardGrid.appendChild(li);
+            });
+        }
+
+        function setupFilters() {
+            var filterBtns = document.querySelectorAll('#filter-bar .filter-btn');
+            filterBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(function(b) {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    activeFilter = btn.getAttribute('data-filter') || 'all';
+                    renderCards();
+                });
+            });
         }
 
         function renderArticle(post) {
@@ -676,7 +825,10 @@
                 return '<span class="tag">' + escapeHtml(t) + '</span>';
             }).join('');
 
-            var bodyHtml = typeof marked !== 'undefined' ? marked.parse(post.content) : post.content;
+            // Normalize any leading /assets/ paths so they resolve relative to writeups.html
+            var normalizedContent = (post.content || '').replace(/\]\(\/assets\//g, '](assets/');
+            var bodyHtml = typeof marked !== 'undefined' ? marked.parse(normalizedContent) : normalizedContent;
+            bodyHtml = bodyHtml.replace(/src=["']\/assets\//g, 'src="assets/');
 
             articleView.innerHTML =
                 '<a href="writeups.html" class="back-link">&larr; All write-ups</a>' +
@@ -737,5 +889,7 @@
         loadPosts();
     })();
     </script>
+    <!-- Mehran AI Portfolio Assistant Widget -->
+    <script src="chatbot.js"></script>
 </body>
 </html>

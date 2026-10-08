@@ -1,4 +1,5 @@
 [
+  "n8n-soc-alert-pipeline.md",
   "ssh-bruteforce-detection.md",
   "pcap-phishing-investigation.md"
 ]
