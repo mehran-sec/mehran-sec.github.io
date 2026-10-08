@@ -10,7 +10,8 @@
   // Configurable backend URL
   // In local dev (localhost/127.0.0.1), connects to http://localhost:8000
   // In production (GitHub Pages), connects to your deployed backend URL
-  const PRODUCTION_BACKEND_URL = window.MEHRAN_AI_BACKEND_URL || "https://mehran-ai-backend.onrender.com";
+  //const PRODUCTION_BACKEND_URL = window.MEHRAN_AI_BACKEND_URL || "https://mehran-ai-backend.onrender.com";
+   const PRODUCTION_BACKEND_URL = window.MEHRAN_AI_BACKEND_URL || "https://dakota-reminder-invite-suggested.trycloudflare.com";
   const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const BACKEND_URL = IS_LOCAL ? "http://localhost:8000" : PRODUCTION_BACKEND_URL;
 
