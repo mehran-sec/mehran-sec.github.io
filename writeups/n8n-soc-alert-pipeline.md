@@ -38,9 +38,20 @@ The LLM never closes or deletes anything. It writes a recommendation and a perso
 This is the finished workflow on the n8n canvas, from the webhook on the left to Slack and Jira on the right:
 
 
+## Test
+
+**Attack Simulation**
+![Simulating attack](assets/ssh-hydra-attack.png)
+
+The attack is simulated against a monitered endpoint. 
+
+**Detection**
+![Detection](assets/ssh-wazuh-alert.png)
+Alert gets generated in wazuh which is then shipped via python script to n8n  webhook and it triggers the wrokflow 
 
 ## Results
 
+**Slack notificaation**
 ![Slack Notification](assets/Slack_notification.png)
 
 The team gets notified when an alert is true positive along with Suggested action according to NIST Picerl and investigation query for further investigation.
