@@ -241,6 +241,8 @@
     }
 
     .work-card {
+        position: relative;
+        cursor: pointer;
         display: flex;
         flex-direction: column;
         background: var(--bg-surface);
@@ -280,6 +282,16 @@
         line-height: 1.35;
         margin-bottom: 0.75rem;
         transition: color 0.15s ease;
+    }
+    .work-card-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+    .work-card-title a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
     }
     .work-card:hover .work-card-title {
         color: var(--accent);
@@ -326,6 +338,8 @@
         margin-left: auto;
     }
     .work-card-link {
+        position: relative;
+        z-index: 2;
         font-family: var(--font-mono);
         font-size: 0.75rem;
         color: var(--accent);
@@ -422,7 +436,7 @@
                         <path d="m9 12 2 2 4-4"/>
                     </svg>
                 </div>
-                <h3 class="work-card-title">AI-Augmented SOC L1 Pipeline</h3>
+                <h3 class="work-card-title"><a href="writeups.html#n8n-soc-alert-pipeline">AI-Augmented SOC L1 Pipeline</a></h3>
                 <p class="work-card-desc">
                     Kali &rarr; Ubuntu (Wazuh Agent) &rarr; Wazuh Manager + n8n + AI triage. Automated detection and response workflow.
                 </p>
@@ -455,7 +469,7 @@
                         <line x1="6" x2="6.01" y1="18" y2="18"/>
                     </svg>
                 </div>
-                <h3 class="work-card-title">Wazuh Detection Engineering</h3>
+                <h3 class="work-card-title"><a href="writeups.html#wazuh-detection-lab">Wazuh Detection Engineering</a></h3>
                 <p class="work-card-desc">
                     Custom correlation rules, MITRE ATT&amp;CK mapping, alert analysis and dashboards.
                 </p>
@@ -466,7 +480,7 @@
                         <span class="tag">Linux</span>
                     </div>
                     <div class="work-card-links">
-                        <a href="writeups.html#ssh-bruteforce-detection" class="work-card-link" title="Read write-up">
+                        <a href="writeups.html#wazuh-detection-lab" class="work-card-link" title="Read write-up">
                             Writeup
                         </a>
                         <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
@@ -488,7 +502,7 @@
                         <circle cx="18" cy="20" r="1"/>
                     </svg>
                 </div>
-                <h3 class="work-card-title">Home Lab Infrastructure</h3>
+                <h3 class="work-card-title"><a href="writeups.html#enterprise-soc-homelab">Home Lab Infrastructure</a></h3>
                 <p class="work-card-desc">
                     Kali, Ubuntu VMs, Docker, bridged networking and real-world lab setup.
                 </p>
@@ -499,6 +513,9 @@
                         <span class="tag">Virtualization</span>
                     </div>
                     <div class="work-card-links">
+                        <a href="writeups.html#enterprise-soc-homelab" class="work-card-link" title="Read write-up">
+                            Writeup
+                        </a>
                         <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
                            target="_blank" rel="noopener noreferrer" class="work-card-link" aria-label="GitHub Repo for Home Lab Infrastructure">
                             Repo &rarr;

@@ -356,6 +356,8 @@
     }
 
     .project-card-new {
+        position: relative;
+        cursor: pointer;
         display: flex;
         flex-direction: column;
         background: var(--bg-surface);
@@ -368,6 +370,9 @@
         border-color: var(--accent);
         background-color: var(--bg-elevated);
         transform: translateY(-2px);
+    }
+    .project-card-new:hover .project-card-title {
+        color: var(--accent);
     }
     .project-card-top {
         display: flex;
@@ -406,6 +411,17 @@
         color: var(--text-primary);
         margin-bottom: 0.625rem;
         line-height: 1.3;
+        transition: color 0.15s ease;
+    }
+    .project-card-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+    .project-card-title a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
     }
     .project-card-desc {
         font-size: 0.875rem;
@@ -424,6 +440,8 @@
         margin-bottom: 0;
     }
     .project-repo-link {
+        position: relative;
+        z-index: 2;
         font-family: var(--font-mono);
         font-size: 0.75rem;
         color: var(--accent);
@@ -885,7 +903,7 @@
                         </div>
                         <span class="project-card-badge">Project</span>
                     </div>
-                    <h3 class="project-card-title">AI-Augmented SOC L1 Pipeline</h3>
+                    <h3 class="project-card-title"><a href="writeups.html#n8n-soc-alert-pipeline">AI-Augmented SOC L1 Pipeline</a></h3>
                     <p class="project-card-desc">
                         End-to-end lab with Wazuh &rarr; n8n &rarr; Claude AI triage. Automated threat enrichment, risk scoring, and incident dispatch to Slack &amp; Jira.
                     </p>
@@ -916,7 +934,7 @@
                         </div>
                         <span class="project-card-badge">Project</span>
                     </div>
-                    <h3 class="project-card-title">Wazuh Detection Engineering</h3>
+                    <h3 class="project-card-title"><a href="writeups.html#wazuh-detection-lab">Wazuh Detection Engineering</a></h3>
                     <p class="project-card-desc">
                         Custom correlation rules, MITRE ATT&amp;CK mapping, brute-force frequency alerting, and automated active response mechanisms.
                     </p>
@@ -945,7 +963,7 @@
                         </div>
                         <span class="project-card-badge">Project</span>
                     </div>
-                    <h3 class="project-card-title">Enterprise SOC Home Lab</h3>
+                    <h3 class="project-card-title"><a href="writeups.html#enterprise-soc-homelab">Enterprise SOC Home Lab</a></h3>
                     <p class="project-card-desc">
                         Multi-node virtualized security operations environment with Wazuh in Docker, Kali, Metasploitable, Nessus, and Windows Server on KVM.
                     </p>
