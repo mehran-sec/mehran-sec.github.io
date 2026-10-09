@@ -18,20 +18,34 @@ In plain words: Wazuh raises an alert, n8n checks the IP against threat intel, a
 
 Each step does one small job. That is on purpose: when something breaks, I know which box to open.
 
+### What each piece does
+- **Wazuh** sends alerts to an n8n webhook as they happen.
+- **Custom Script** A custom python script ships logs toward n8n webhook
+- **Webhook** Recieves  alerts from  python script
+- **Normalization and Deduplication** Alerts gets Normalized into a fixed fields and Duplicate alerts gets dropped 
+- **AbuseIPDB and VirusTotal** answer one question: has anyone seen this address doing bad things?
+- **Scoring Logic** The most important and complex part of this project is the scring logic that calculates a score based on IOCs and other 
+other things like wazuh rule level and the alerts that gets scored higher (>20) gets analysed with ai 
+- **The LLM** (via Groq) gets the alert and the lookup results, and returns a short structured verdict: what happened, how worried to be, what to do next.
+- **A Switch node** reads the severity in that verdict and decides where it goes.
+- **Slack and Jira** are where a human actually sees it.
+
+The LLM never closes or deletes anything. It writes a recommendation and a person decides.
+
 ## n8n Workflow 
 ![The n8n workflow canvas](assets/n8n-workflow.png)
 
 This is the finished workflow on the n8n canvas, from the webhook on the left to Slack and Jira on the right:
 
 
-## What each piece does
-- **Wazuh** sends alerts to an n8n webhook as they happen.
-- **AbuseIPDB and VirusTotal** answer one question: has anyone seen this address doing bad things?
-- **The LLM** (via Groq) gets the alert and the lookup results, and returns a short structured verdict: what happened, how worried to be, what to do next.
-- **A Switch node** reads the severity in that verdict and decides where it goes.
-- **Slack and Jira** are where a human actually sees it.
 
-The LLM never closes or deletes anything. It writes a recommendation and a person decides.
+## Results
+
+![Slack Notification](assets/Slack_notification.png)
+
+The team gets notified when an alert is true positive along with Suggested action according to NIST Picerl and investigation query for further investigation.
+
+
 
 ## What broke (and what it taught me)
 This is the part I learned the most from.
@@ -44,11 +58,6 @@ This is the part I learned the most from.
 
 **The Switch node was fussy.** Rules mode wants the value, the operator and the comparison set up in a precise shape. Getting it right once and reusing it saved a lot of guessing.
 
-## Results
-
-![Slack Notification](assets/Slack_notification.png)
-
-The team gets notified when an alert is true positive along with Suggested action according to NIST Picerl and investigation query for further investigation.
 
 ## What I'd improve
 - **Cache IP lookups.** The same noisy address shouldn't cost an API call every time.
