@@ -20,6 +20,11 @@
     <!-- Markdown Parser (marked.js) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+    <!-- Modern Geometric Sans Font (Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
     /* ==========================================================================
        VARIABLES — Edit these to change the entire look
@@ -35,11 +40,10 @@
         --accent-hover: #BDDA84;
         --border: #252530;
         --danger: #E55B5B;
-        --radius: 4px;
+        --radius: 8px;
         --max-width: 1080px;
         --nav-height: 60px;
-        /* System fonts — zero external requests, instant load */
-        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     }
 
@@ -189,12 +193,12 @@
     }
     .tag {
         font-family: var(--font-mono);
-        font-size: 0.6875rem;
-        color: var(--text-muted);
+        font-size: 0.7rem;
+        color: var(--text-secondary);
         background: var(--bg-primary);
         border: 1px solid var(--border);
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--radius);
+        padding: 0.25rem 0.65rem;
+        border-radius: 9999px;
     }
 
     /* ==========================================================================
@@ -300,7 +304,7 @@
     .card-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
-        gap: 1.5rem;
+        gap: 1.25rem;
         padding: 2rem 0 4rem;
         list-style: none;
     }
@@ -313,15 +317,16 @@
         display: flex;
     }
 
-    /* Redesigned Write-up Card */
+    /* Write-up Card — Matching index.html compact design */
     .writeup-card {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
         flex: 1;
         background: var(--bg-surface);
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 1.5rem;
+        padding: 1.125rem 1.25rem;
         text-decoration: none;
         transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
     }
@@ -340,46 +345,52 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1.25rem;
+        flex-shrink: 0;
+        margin-bottom: 0;
     }
     .writeup-card-icon svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
+    }
+    .writeup-card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        flex-grow: 1;
+        min-width: 0;
     }
     .writeup-card-title {
-        font-size: 1.0625rem;
+        font-size: 0.9375rem;
         font-weight: 600;
         color: var(--text-primary);
         line-height: 1.35;
-        margin-bottom: 0.85rem;
+        margin-bottom: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         transition: color 0.15s ease;
     }
     .writeup-card:hover .writeup-card-title {
         color: var(--accent);
     }
-    .writeup-card .tags {
-        margin-bottom: 1.5rem;
-        margin-top: auto;
-    }
-    .writeup-card-footer {
+    .writeup-card-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border);
+        gap: 0.5rem;
         font-family: var(--font-mono);
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         color: var(--text-muted);
-        margin-top: auto;
     }
-    .writeup-card-arrow {
-        color: var(--accent);
-        font-size: 0.95rem;
-        line-height: 1;
-        transition: transform 0.15s ease;
-    }
-    .writeup-card:hover .writeup-card-arrow {
-        transform: translateX(3px);
+    .writeup-card-tag {
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        color: var(--text-muted);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
     }
 
     .no-writeups {
@@ -778,10 +789,7 @@
 
             filtered.forEach(function(post) {
                 var li = document.createElement('li');
-                var tags = (post.meta.tags || '').split(',').map(function(t) { return t.trim(); }).filter(Boolean);
-                var tagsHtml = tags.map(function(t) {
-                    return '<span class="tag">' + escapeHtml(t) + '</span>';
-                }).join('');
+                var category = post.meta.category || (post.meta.tags ? post.meta.tags.split(',')[0].trim() : 'Lab');
 
                 li.innerHTML =
                     '<a class="writeup-card" href="#' + encodeURIComponent(post.slug) + '">' +
@@ -793,11 +801,12 @@
                                 '<line x1="16" y1="17" x2="8" y2="17"/>' +
                             '</svg>' +
                         '</div>' +
-                        '<h2 class="writeup-card-title">' + escapeHtml(post.meta.title || post.slug) + '</h2>' +
-                        (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
-                        '<div class="writeup-card-footer">' +
-                            '<time>' + escapeHtml(post.meta.date || '') + '</time>' +
-                            '<span class="writeup-card-arrow">&rarr;</span>' +
+                        '<div class="writeup-card-content">' +
+                            '<h3 class="writeup-card-title">' + escapeHtml(post.meta.title || post.slug) + '</h3>' +
+                            '<div class="writeup-card-meta">' +
+                                '<time>' + escapeHtml(post.meta.date || '') + '</time>' +
+                                '<span class="writeup-card-tag">' + escapeHtml(category) + '</span>' +
+                            '</div>' +
                         '</div>' +
                     '</a>';
 
