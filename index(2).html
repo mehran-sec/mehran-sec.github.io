@@ -347,102 +347,124 @@
         transform: translateX(2px);
     }
 
-    /* Featured Work Grid — 2 cards (design ported from bick/website) */
-    .fp-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 3rem;
+    /* Featured Work Grid — 3 columns */
+    .featured-work-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 1.15rem;
         margin-bottom: 4rem;
     }
-    @media (min-width: 768px) {
-        .fp-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.5rem;
+    @media (min-width: 960px) {
+        .featured-work-grid {
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 
-    .fp-card {
+    .project-card-new {
+        position: relative;
+        cursor: pointer;
         display: flex;
         flex-direction: column;
-        width: 100%;
-        min-width: 100%;
-        background: #060606;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 0.75rem;
-        overflow: hidden;
-        break-inside: avoid;
-        color: #fff;
-        text-decoration: none;
-        transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.35rem 1.4rem;
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
     }
-    .fp-card:hover { border-color: #666; }
-    .fp-card:active { transform: translate3d(0, 2px, 0); }
-    .fp-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-    .fp-media {
-        position: relative;
+    .project-card-new:hover {
+        border-color: var(--accent);
+        background-color: var(--bg-elevated);
+        transform: translateY(-2px);
+    }
+    .project-card-new:hover .project-card-title {
+        color: var(--accent);
+    }
+    .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.95rem;
+    }
+    .project-card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(168, 198, 108, 0.08);
+        border: 1px solid rgba(168, 198, 108, 0.22);
+        color: var(--accent);
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 10rem;
-        width: 100%;
-        overflow: hidden;
-        background: #111;
+        flex-shrink: 0;
     }
-    .fp-media img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.6;
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    .project-card-icon svg {
+        width: 20px;
+        height: 20px;
     }
-    .fp-media img:hover { transform: scale(1.05); }
-
-    .fp-badge {
-        position: absolute;
-        z-index: 10;
-        top: 0.5rem;
-        right: 0.5rem;
+    .project-card-badge {
+        font-family: var(--font-sans);
+        font-size: 0.6875rem;
+        font-weight: 500;
+        color: var(--accent);
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.35rem 0.9rem;
+        border-radius: 9999px;
         display: inline-flex;
         align-items: center;
-        padding: 0.125rem 0.625rem;
-        border-radius: 9999px;
-        border: 1px solid hsl(0 0% 14.9%);
-        background: rgba(6, 6, 6, 0.6);
-        -webkit-backdrop-filter: blur(4px);
-        backdrop-filter: blur(4px);
-        color: hsl(0 0% 98%);
-        font-size: 0.75rem;
-        line-height: 1rem;
-        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1;
     }
-    @media (min-width: 768px) {
-        .fp-badge { top: 1rem; right: 1rem; }
-    }
-
-    .fp-body { padding: 1rem; }
-    .fp-body p {
-        display: block;
-        margin: 0 0 1rem;
-        font-size: 1rem;
-        line-height: 2;
-        color: #fff;
-        opacity: 0.6;
-    }
-    .fp-body h3 {
-        margin: 0;
-        font-size: 1.125rem;
-        line-height: 1.75rem;
+    .project-card-title {
+        font-size: 1.1rem;
         font-weight: 700;
-        color: #fff;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        transition: color 0.15s ease;
     }
-
-    @media (prefers-reduced-motion: reduce) {
-        .fp-media img { transition: none; }
-        .fp-media img:hover { transform: none; }
+    .project-card-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+    .project-card-title a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+    .project-card-desc {
+        font-size: 0.84rem;
+        line-height: 1.55;
+        color: #A1A1AA;
+        margin-bottom: 1.1rem;
+        flex-grow: 1;
+    }
+    .project-card-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: auto;
+    }
+    .project-card-footer .tags {
+        margin-bottom: 0;
+    }
+    .project-repo-link {
+        position: relative;
+        z-index: 2;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: color 0.15s ease;
+        text-decoration: none;
+    }
+    .project-repo-link:hover {
+        color: var(--accent-hover);
+        text-decoration: underline;
     }
 
     /* Recent Write-ups Grid — 3 columns */
@@ -880,30 +902,95 @@
                 <a href="work.html" class="section-view-all">View all work &rarr;</a>
             </div>
 
-            <div class="fp-grid">
-                <!-- Card: AI-Augmented SOC L1 Pipeline -->
-                <a href="writeups.html#n8n-soc-alert-pipeline" class="fp-card">
-                    <div class="fp-media">
-                        <img src="assets/n8n-workflow.png" alt="n8n workflow canvas for the AI-augmented SOC pipeline" loading="lazy">
-                        <span class="fp-badge">2026</span>
+            <div class="featured-work-grid">
+                <!-- Project 1: AI-Augmented SOC L1 Pipeline -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">AI + SOC</span>
                     </div>
-                    <div class="fp-body">
-                        <p>End-to-end lab with Wazuh → n8n → Claude AI triage. Automated threat enrichment, risk scoring, and incident dispatch to ...</p>
-                        <h3>AI-Augmented SOC L1 Pipeline</h3>
+                    <h3 class="project-card-title"><a href="writeups.html#n8n-soc-alert-pipeline">AI-Augmented SOC L1 Pipeline</a></h3>
+                    <p class="project-card-desc">
+                        End-to-end lab with Wazuh &rarr; n8n &rarr; Claude AI triage. Automated threat enrichment, risk scoring, and incident dispatch to Slack &amp; Jira.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">n8n</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">AI</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Ai_Augmented_SOC"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
                     </div>
-                </a>
+                </article>
 
-                <!-- Card: Wazuh Detection Engineering -->
-                <a href="writeups.html#wazuh-detection-lab" class="fp-card">
-                    <div class="fp-media">
-                        <img src="assets/ssh-wazuh-alert.png" alt="Wazuh alert document for the custom SSH brute-force correlation rule" loading="lazy" style="object-position: center 90%;">
-                        <span class="fp-badge">2026</span>
+                <!-- Project 2: Wazuh Detection Engineering -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/>
+                                <rect width="20" height="8" x="2" y="14" rx="2" ry="2"/>
+                                <line x1="6" x2="6.01" y1="6" y2="6"/>
+                                <line x1="6" x2="6.01" y1="18" y2="18"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">DevSecOps</span>
                     </div>
-                    <div class="fp-body">
-                        <p>Custom correlation rules, MITRE ATT&amp;CK mapping, brute-force frequency alerting, and automated active response mechanisms...</p>
-                        <h3>Wazuh Detection Engineering</h3>
+                    <h3 class="project-card-title"><a href="writeups.html#wazuh-detection-lab">Wazuh Detection Engineering</a></h3>
+                    <p class="project-card-desc">
+                        Custom correlation rules, MITRE ATT&amp;CK mapping, brute-force frequency alerting, and automated active response mechanisms.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">MITRE ATT&CK</span>
+                            <span class="tag">Linux</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
                     </div>
-                </a>
+                </article>
+
+                <!-- Project 3: Enterprise SOC Home Lab -->
+                <article class="project-card-new">
+                    <div class="project-card-top">
+                        <div class="project-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                                <polyline points="2 17 12 22 22 17"/>
+                                <polyline points="2 12 12 17 22 12"/>
+                            </svg>
+                        </div>
+                        <span class="project-card-badge">Home Lab</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="writeups.html#enterprise-soc-homelab">Enterprise SOC Home Lab</a></h3>
+                    <p class="project-card-desc">
+                        Multi-node virtualized security operations environment with Wazuh in Docker, Kali, Metasploitable, Nessus, and Windows Server on KVM.
+                    </p>
+                    <div class="project-card-footer">
+                        <div class="tags">
+                            <span class="tag">Wazuh</span>
+                            <span class="tag">KVM</span>
+                            <span class="tag">Docker</span>
+                            <span class="tag">Kali</span>
+                        </div>
+                        <a href="https://github.com/mehran-sec/Wazuh-Detection-lab-"
+                           target="_blank" rel="noopener noreferrer" class="project-repo-link">
+                            GitHub Repo &rarr;
+                        </a>
+                    </div>
+                </article>
             </div>
 
             <!-- Part 2: RECENT WRITE-UPS -->
