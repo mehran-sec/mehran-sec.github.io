@@ -119,8 +119,8 @@ sudo -i          # root shell
 **Before.** Every sudo to root produced the same generic alert: rule `5402`, "Successful sudo to ROOT executed", at level 3, plus PAM session noise (`5501` and `5502`). A harmless command and a full root shell looked identical.
 
 
+![wazuh sudo events before custom rules](<assets/Use of sudo Before Custom.png>)
 
-<img src="assets/Use of sudo Before Custom.png" alt="Wazuh sudo events before custom rules" width="620">
 
 **The rule:**
 
