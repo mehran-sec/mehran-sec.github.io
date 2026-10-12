@@ -15,10 +15,10 @@ Deployment is manual on purpose. I explain why in the last section.
 
 ## Lab setup
 - **Wazuh:** v4.14.8, single-node (manager, indexer and dashboard on one host)
-- **Endpoint:** an Ubuntu VM on the same laptop, running the Wazuh agent
+- **Endpoint:** an Ubuntu and window vm
 - **Attacker:** kali linux , attacking only the VM that I own
 
-![Lab architecture](assets/ss_architecture.png)
+![wazuh architechture](assets/wazuh-lab.svg){: width="700" }
 
 I started this lab with Wazuh in Docker and later moved to a native install. Rule deployment got simpler: the rules folder is just a folder on disk, with no container to copy files into.
 
