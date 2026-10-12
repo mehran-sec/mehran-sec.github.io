@@ -6,32 +6,30 @@ summary: Designing and deploying a multi-node enterprise SOC simulation with Waz
 tags: SOC, Home Lab, Wazuh, Docker, KVM, Virtualization
 ---
 
-## Objective
-<!-- Purpose of building this home lab environment and the security capabilities tested -->
 
-## Infrastructure & Lab Specs
-<!-- Hardware specifications, hypervisor setup (KVM / Proxmox / VirtualBox), and network segmentation -->
+## Home lab to get full SOC experience 
 
-- **Host Machine:** 
-- **Virtualization / Hypervisor:** 
-- **Network Layout:** 
-- **SIEM / Telemetry Stack:** 
+## TO DO 
 
-## Network Topology & Data Flow
-<!-- Diagram or description showing how agents communicate with the SIEM and log forwarders -->
 
-## Deployed Components & VMs
-<!-- List of virtual machines, operating systems, and agent configurations -->
+## Architecture 
 
-- **SIEM & Management Server:** 
-- **Victim Endpoints (Linux & Windows):** 
-- **Adversary Emulation Host (Kali Linux):** 
+- Active Directory runnig on window sever 
+- SIEM monitering multiple end points 
+- IDS monitering Network Traffic 
+- Firewall pfsense/opsense 
 
-## Telemetry Collection & Monitoring
-<!-- What logs are ingested (Sysmon, Windows Event Logs, auth.log, Suricata/Zeek network traffic) -->
+**Validation**
+Simulated Attacks to evaluate the strength of  architechture
 
-## Challenges Faced & Troubleshooting
-<!-- Problems encountered during networking, resource management, or configuration and how you solved them -->
+**Detection**
+Evaluate and improve Detection Logic
+you can read about detection logic in wazuh detection Engneering writup.
 
-## Future Enhancements
-<!-- Next steps, additions (e.g., adding Suricata, Zeek, Velociraptor, or active response scripts) -->
+**Note**
+Still working 
+Soon would post the deployment guide 
+As this project requires alot of systems to run simulatneously 
+which would require more resources so it may take some time .
+ wait patiently ...
+
