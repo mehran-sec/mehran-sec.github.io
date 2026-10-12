@@ -19,8 +19,8 @@
   const SUGGESTED_QUESTIONS = [
     "What does Mehran know about SOC?",
     "Tell me about his Wazuh project.",
-    "what is his Career Goals "
     "Is Mehran a cute boy? 👀",
+    "Is Mehran actually a hacker? 😎?"
   ];
 
   // Built-in Markdown Formatter
