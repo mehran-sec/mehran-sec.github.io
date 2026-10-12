@@ -12,7 +12,7 @@ A SOC analyst's first five minutes with any alert are the same. Copy the IP. Pas
 I wanted the machine to do those five minutes, so a human only sees the alert once it already has context.
 
 ## How it flows  
-![Architecture of the n8n SOC alert pipeline](assets/n8n-architechture.png)
+![Architecture of the n8n SOC alert pipeline](assets/n8n_Architecture.png)
 
 In plain words: Wazuh raises an alert, n8n checks the IP against threat intel, an LLM writes a verdict, and the result lands in Slack (and in Jira if it is serious).
 
