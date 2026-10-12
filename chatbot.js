@@ -15,6 +15,18 @@
   const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const BACKEND_URL = IS_LOCAL ? "http://localhost:8000" : PRODUCTION_BACKEND_URL;
 
+  // Wake-up ping: silently hit /health on page load so Render starts spinning up immediately
+  (function pingBackendOnLoad() {
+    if (IS_LOCAL) return;
+    fetch(BACKEND_URL + '/health', { method: 'GET', cache: 'no-store' })
+      .then(function (r) {
+        if (r.ok) console.info('[Mehran AI] Backend is awake ✓');
+      })
+      .catch(function () {
+        console.info('[Mehran AI] Backend warming up...');
+      });
+  })();
+
   // 4 Suggested Questions for recruiters & visitors
   const SUGGESTED_QUESTIONS = [
     "What does Mehran know about SOC?",
