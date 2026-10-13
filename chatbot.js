@@ -32,7 +32,7 @@
     "What does Mehran know about SOC?",
     "Tell me about his Wazuh project.",
     "What is his career goals",
-    "Is Mehran a cute boy ?"
+    "Tell me about SOC?",
   ];
 
   // Built-in Markdown Formatter
