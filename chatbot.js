@@ -966,7 +966,7 @@
     wakeupTimer = setTimeout(() => {
       const statusEl = document.getElementById('mehran-typing-status');
       if (statusEl) {
-        statusEl.textContent = 'Waking up server...';
+        statusEl.textContent = 'Still Working on it...';
       }
     }, 4500);
   }
