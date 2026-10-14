@@ -9,7 +9,9 @@ tags: SOC, Home Lab, Wazuh, Docker, KVM, Virtualization
 
 ## Home lab to get full SOC experience 
 
-## TO DO 
+![Architecture diagram](assets/Enterprise-soc.png)
+
+
 
 
 ## Architecture 
