@@ -29,10 +29,9 @@
 
   // 4 Suggested Questions for recruiters & visitors
   const SUGGESTED_QUESTIONS = [
-    "What does Mehran know about SOC?",
-    "Tell me about his Wazuh project.",
-    "What is his career goals",
-    "Tell me about SOC?",
+    "Tell me about his AI-augmented SOC pipeline.",
+     "What detection rules has he written?",
+    "What are his career goals",
   ];
 
   // Built-in Markdown Formatter
