@@ -1,4 +1,5 @@
 [
+  "ai-augmented-soc-pipeline.md",
   "n8n-soc-alert-pipeline.md",
   "ssh-bruteforce-detection.md",
   "wazuh-detection-lab.md",
