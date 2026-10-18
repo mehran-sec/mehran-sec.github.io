@@ -129,20 +129,6 @@ I tested the pipeline with 28 test cases before considering it done. Some exampl
 
 ---
 
-## Configuration
-
-Everything tunable is in one place — a single Config node at the start of the n8n workflow. Nothing is buried inside individual nodes.
-
-| Setting | Default |
-|---|---|
-| Gate level (min Wazuh severity to reach AI) | 7 |
-| Floor level (AI can't downgrade above this) | 12 |
-| AbuseIPDB threshold for "malicious" | confidence ≥ 50 |
-| VirusTotal threshold for "malicious" | 3 or more engines |
-| Dedup window | 120 seconds |
-
----
-
 ## Tech Stack
 
 | Layer | Tool |
