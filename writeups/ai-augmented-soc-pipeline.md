@@ -2,7 +2,7 @@
 title: AI-Augmented SOC Alert Triage Pipeline
 category: Security Automation
 date: Oct 2026
-summary: I built a system that automatically reads security alerts, checks them against threat intel databases, asks an AI for its opinion, and sends the ones that matter to the right people — so nobody has to do that manually.
+summary: I built a system that automatically reads security alerts, checks them against threat intel databases, asks an AI for its opinion, and sends the ones that matter to the right people .
 tags: n8n, Wazuh, SOAR, AI, VirusTotal, AbuseIPDB, Jira, Slack
 ---
 
@@ -39,7 +39,7 @@ The whole pipeline runs in **n8n**, an automation tool I self-host with Docker. 
 
 
 
-### What each piece does
+## What each piece does
 - **Wazuh** sends alerts to an n8n webhook as they happen.
 - **Custom Script** A custom python script ships logs toward n8n webhook
 - **Webhook** Recieves  alerts from  python script
@@ -64,7 +64,7 @@ The attack is simulated against a monitered endpoint.
 Alert gets generated in wazuh which is then shipped via python script to n8n  webhook and it triggers the wrokflow 
 
 
-### Deduplication
+## Deduplication
 
 ![Suppressed duplicate count in the audit sheet](assets/soc-suppressed-count.png)
 
@@ -74,7 +74,7 @@ The dedup step creates a fingerprint for each alert using a combination of field
 
 ---
 
-### AI Triage
+## AI Triage
 
 ![AI verdict output for a true positive alert](assets/soc-ai-output.png)
 
@@ -93,7 +93,7 @@ If the model returns something unexpected —  the alert automatically becomes `
 
 ---
 
-### Routing and Notification
+## Routing and Notification
 
 
 ![Slack notification for a true positive](assets/soc-slack-notify.png)
@@ -102,7 +102,7 @@ The Slack message includes the AI's verdict, confidence, justification, suggeste
 
 ---
 
-### Audit Log
+## Audit Log
 
 ![Alert logged in the audit sheet](assets/soc-logged.png)
 
