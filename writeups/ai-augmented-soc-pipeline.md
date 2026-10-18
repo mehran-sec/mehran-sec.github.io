@@ -59,7 +59,6 @@ Wazuh alerts don't all have the same shape. A Windows login failure looks differ
 - Domain
 - URL
 
-If a field isn't present, it's set to null. n8n never crashes on a missing key because every field is always there.
 
 ---
 
@@ -86,9 +85,6 @@ For each alert, the pipeline looks up any indicators it found:
 | Domains | VirusTotal |
 | URLs | VirusTotal |
 
-Private IPs (10.x.x.x, 192.168.x.x, etc.), loopback, link-local, and documentation ranges are skipped — there's no point sending those to a public threat intel service.
-
-The results are stored on the alert. If a lookup fails (VirusTotal returns a rate-limit error, for example), that's recorded too so nothing silently disappears.
 
 ---
 
@@ -119,13 +115,13 @@ Alerts that pass the gate go to a language model with the cleaned-up alert data.
 - **Suggested action:** what to do next
 - **Investigation query:** a ready-made search query for further investigation
 
-If the model returns something unexpected — garbled output, missing fields, a verdict it invented — the alert automatically becomes `needs_review`. Nothing is ever silently lost.
+If the model returns something unexpected —  the alert automatically becomes `needs_review`. Nothing is ever silently lost.
 
 ![AI verdict output for a true positive alert](assets/soc-ai-output.png)
 
 ---
 
-### The Verdict Floor (Safety Rule)
+### The Verdict Safety Rule
 
 The AI can mark an alert as a false positive. But if the alert has a Wazuh severity of 12 or above, or the threat intel came back malicious, or it's on the escalation list — the pipeline overrides the AI's verdict and raises it to `needs_review`.
 
@@ -135,7 +131,7 @@ The reasoning: a model should never be able to wave through a high-severity aler
 
 ### Routing and Notification
 
-- `true_positive` and `needs_review` → Slack message + Jira ticket + audit row
+- `true_positive` and `needs_review` ---> Slack message + Jira ticket + audit row
 - `false_positive` → audit row only
 
 ![Slack notification for a true positive](assets/soc-slack-notify.png)
