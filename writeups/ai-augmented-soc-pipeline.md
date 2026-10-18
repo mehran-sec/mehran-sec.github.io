@@ -8,11 +8,9 @@ tags: n8n, Wazuh, SOAR, AI, VirusTotal, AbuseIPDB, Jira, Slack
 
 ## The Problem
 
-Security monitoring tools like Wazuh generate a lot of alerts. Most of them are noise. A few are real. A SOC analyst's job, at the first level, is to look at each alert, look up the suspicious IP or file, decide if it's worth worrying about, and pass it on.
+A SOC analyst's first five minutes with any alert are the same. Copy the IP. Paste it into AbuseIPDB. Paste it into VirusTotal. Read a bit. Decide. Do that a hundred times a day and the boring part eats the thinking part.
 
-That cycle — copy the IP, check AbuseIPDB, check VirusTotal, read the result, write a summary — can take five minutes per alert. Do that a hundred times a day and the repetitive part swallows the thinking part.
-
-I wanted a system that does that five-minute cycle automatically, so a human only sees an alert once it already comes with context and a recommendation.
+I wanted the automation to do those five minutes, so a human only sees the alert once it already has context.
 
 ---
 
@@ -32,123 +30,87 @@ An automated pipeline that sits between Wazuh and the team. When Wazuh detects s
 
 ## Architecture
 
+
 <img src="assets/soc-architecture.svg" alt="Pipeline architecture diagram" style="max-width:600px; width:100%; display:block; margin:0 auto;">
 
 The whole pipeline runs in **n8n**, an automation tool I self-host with Docker. Wazuh runs natively on the same machine. A small Python script bridges the two.
 
 ---
 
-## How Each Part Works
-
-### Receiving the Alert
-
-Wazuh calls a custom Python script whenever it detects something matching the integration rule. The script reads the alert file Wazuh writes to disk, adds a few helper fields, and POSTs it to an n8n webhook.
-
-The webhook is protected by a token — no token, no entry.
-
----
-
-### Normalisation
-
-Wazuh alerts don't all have the same shape. A Windows login failure looks different from a Linux SSH alert, which looks different from a file integrity alert. The normalisation step extracts a consistent set of fields from all of them:
-
-- Source IP
-- Username
-- Command
-- File path and hash
-- Domain
-- URL
 
 
----
+### What each piece does
+- **Wazuh** sends alerts to an n8n webhook as they happen.
+- **Custom Script** A custom python script ships logs toward n8n webhook
+- **Webhook** Recieves  alerts from  python script
+- **Normalization and Deduplication** Alerts gets Normalized into a fixed fields and Duplicate alerts gets dropped 
+- **AbuseIPDB and VirusTotal** answer one question: has anyone seen this address doing bad things?
+- **Gate** Not every alert gets sent to the AI. That would be slow and expensive. The gate decides which alerts deserve it.
+- **The LLM** (via Groq) gets the alert and the lookup results, and returns a structured response with veridict , Confidence , Justification suggested Action   and Investigation Query
+- **Routing and Notification**  `true_positive` and `needs_review` ---> Slack message + Jira ticket + audit row
+ `false_positive` → audit row only
+- **Audit Log** Every alert — escalated or not — writes one row to a Google Sheet. Columns include the timestamp, outcome, rule details, agent name, indicators found, enrichment results, AI verdict, and suppressed duplicate count. This makes the whole system auditable. 
+
+
+## Simulated ATTack:
+
+![alt text](assets/ssh-hydra-attack.png)
+
+The attack is simulated against a monitered endpoint. 
+
+## Wazuh Alerts :
+![alt text](<assets/SSH Brute force Alert Custom.png>)
+
+Alert gets generated in wazuh which is then shipped via python script to n8n  webhook and it triggers the wrokflow 
+
 
 ### Deduplication
 
-During a brute-force attack, Wazuh can fire the same alert dozens of times a minute. Without deduplication, every one of those would become a Jira ticket and a Slack message.
+![Suppressed duplicate count in the audit sheet](assets/soc-suppressed-count.png)
 
 The dedup step creates a fingerprint for each alert using a combination of fields: rule ID, agent name, username, source IP, command, file path, and so on. If the same fingerprint arrives within **120 seconds**, it's dropped. The count of suppressed duplicates is attached to the next alert that gets through, so the responder can see "this happened 14 times in the last two minutes."
 
-The window is fixed, not sliding — it doesn't reset on each new duplicate. That detail matters during sustained attacks.
 
-![Suppressed duplicate count in the audit sheet](assets/soc-suppressed-count.png)
-
----
-
-### Threat Intel Enrichment
-
-For each alert, the pipeline looks up any indicators it found:
-
-| What | Where |
-|---|---|
-| Public IP addresses | AbuseIPDB and VirusTotal |
-| File hashes (SHA-256, SHA-1, or MD5) | VirusTotal |
-| Domains | VirusTotal |
-| URLs | VirusTotal |
-
-
----
-
-### The Gate: Who Gets to See the AI
-
-Not every alert gets sent to the AI. That would be slow and expensive. The gate decides which alerts deserve it.
-
-An alert passes the gate if **any** of these are true:
-
-- The Wazuh rule severity is 7 or above (out of 15)
-- The rule ID is on a manually maintained escalation list
-- The alert maps to a specific MITRE ATT&CK technique (T1110 brute force, T1003 credential dumping, T1021 remote services, T1078 valid accounts)
-- A threat intel lookup came back malicious (AbuseIPDB confidence ≥ 50, or VirusTotal flagged by 3 or more engines)
-
-Anything that doesn't meet these criteria is written to the audit sheet with the label `below_gate` and a note explaining why. It doesn't disappear — it's just handled without the AI step.
 
 ---
 
 ### AI Triage
 
-Alerts that pass the gate go to a language model with the cleaned-up alert data. The model returns a structured response:
-
-- **Verdict:** `true_positive`, `false_positive`, or `needs_review`
-- **Confidence:** how sure it is
-- **Evidence:** which fields led to the verdict
-- **Justification:** a short explanation in plain language
-- **Primary driver:** what the main indicator of concern was
-- **Suggested action:** what to do next
-- **Investigation query:** a ready-made search query for further investigation
-
-If the model returns something unexpected —  the alert automatically becomes `needs_review`. Nothing is ever silently lost.
-
 ![AI verdict output for a true positive alert](assets/soc-ai-output.png)
 
----
 
-### The Verdict Safety Rule
+Alerts that pass the gate go to a language model with the cleaned-up alert data. The model returns a structured response:
 
-The AI can mark an alert as a false positive. But if the alert has a Wazuh severity of 12 or above, or the threat intel came back malicious, or it's on the escalation list — the pipeline overrides the AI's verdict and raises it to `needs_review`.
+- Verdict
+- Confidence
+- Evidence
+- Justification
+- Primary driver
+- Suggested action 
+- Investigation query
 
-The reasoning: a model should never be able to wave through a high-severity alert on its own. A human has to look at it. The floor is a hard rule, not a recommendation.
+If the model returns something unexpected —  the alert automatically becomes `needs_review`. Nothing is ever silently lost.
 
 ---
 
 ### Routing and Notification
 
-- `true_positive` and `needs_review` ---> Slack message + Jira ticket + audit row
-- `false_positive` → audit row only
 
 ![Slack notification for a true positive](assets/soc-slack-notify.png)
 
-The Slack message includes the AI's verdict, confidence, justification, suggested action, and investigation query. The responder has everything they need without opening another tool.
+The Slack message includes the AI's verdict, confidence, justification, suggested action, and investigation query. 
 
 ---
 
 ### Audit Log
 
-Every alert — escalated or not — writes one row to a Google Sheet. Columns include the timestamp, outcome, rule details, agent name, indicators found, enrichment results, AI verdict, and suppressed duplicate count.
-
-This makes the whole system auditable. You can look back and see exactly what happened to every alert.
-
 ![Alert logged in the audit sheet](assets/soc-logged.png)
 
+Every alert — escalated or not — writes one row to a Google Sheet. Columns include the timestamp, outcome, rule details, agent name, indicators found, enrichment results, AI verdict, and suppressed duplicate count.
+
 ---
+
+
 
 ## Testing
 
