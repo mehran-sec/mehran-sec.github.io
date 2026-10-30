@@ -49,7 +49,7 @@
         --nav-height: 60px;
         /* Modern Geometric Sans Font */
         --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     }
 
     /* ==========================================================================
@@ -259,30 +259,35 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0.625rem 1.375rem;
+        padding: 0.625rem 1.5rem;
         font-size: 0.875rem;
-        font-weight: 600;
-        border-radius: var(--radius);
-        transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+        font-weight: 500;
+        border-radius: 999px;
+        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
         cursor: pointer;
+        letter-spacing: -0.01em;
     }
     .btn:active {
-        transform: scale(0.98);
+        transform: scale(0.97);
     }
+    /* White filled CTA — "View Work" & "Write-ups" */
     .btn-primary {
-        background-color: var(--accent);
-        color: var(--bg-primary);
+        background-color: #fff;
+        color: #0B0B0F;
+        border: 1px solid #fff;
     }
     .btn-primary:hover {
-        background-color: var(--accent-hover);
+        opacity: 0.88;
     }
+    /* Ghost outline — "GitHub", "LinkedIn" */
     .btn-ghost {
-        border: 1px solid var(--border);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         color: var(--text-primary);
+        background: transparent;
     }
     .btn-ghost:hover {
-        border-color: var(--accent);
-        color: var(--accent);
+        border-color: rgba(255, 255, 255, 0.38);
+        color: #fff;
     }
 
     /* ==========================================================================
